@@ -384,7 +384,7 @@
                          \typeout{\@chapapp\space\thechapter.}%
                          \addcontentsline{toc}{chapter}%
 %                                   {\protect\numberline{\thechapter}#1}%
-                                   {\tocprechaptername\protect\numberline{\countermapping{\thechapter}\tocpostchaptername}\hspace{2em}#1}%
+                                   {\tocprechaptername\protect\numberline{\countermapping{\thechapter}\tocpostchaptername}#1}%
                     \else
                       \addcontentsline{toc}{chapter}{#1}%
                     \fi
@@ -404,7 +404,8 @@
     \ifnum \c@secnumdepth >\m@ne
         \LARGE\bfseries\prechaptername\countermapping{\thechapter}\postchaptername
     \fi
-    \hspace{1em}
+    % \hspace{1em}
+    \space
     \interlinepenalty\@M
     \LARGE \bfseries #1\par\nobreak
     \vskip 20\p@
