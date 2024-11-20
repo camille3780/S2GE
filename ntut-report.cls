@@ -377,14 +377,14 @@
                     \@afterindentfalse
                     \secdef\@chapter\@schapter}
 \newcommand\countermapping[1]{#1}
-\newcommand\tocprechaptername{第}
-\newcommand\tocpostchaptername{章}
+\newcommand\tocprechaptername{Chapter }
+\newcommand\tocpostchaptername{}
 \def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
                          \refstepcounter{chapter}%
                          \typeout{\@chapapp\space\thechapter.}%
                          \addcontentsline{toc}{chapter}%
 %                                   {\protect\numberline{\thechapter}#1}%
-                                   {\tocprechaptername\protect\numberline{\countermapping{\zhnumber\thechapter}\tocpostchaptername}\hspace{2em}#1}%
+                                   {\tocprechaptername\protect\numberline{\countermapping{\thechapter}\tocpostchaptername}\hspace{2em}#1}%
                     \else
                       \addcontentsline{toc}{chapter}{#1}%
                     \fi
@@ -397,12 +397,12 @@
                       \@makechapterhead{#2}%
                       \@afterheading
                     \fi}
-\newcommand\prechaptername{第} % default
-\newcommand\postchaptername{章}
+\newcommand\prechaptername{Chapter } % default
+\newcommand\postchaptername{}
 \def\@makechapterhead#1{%
   {\parindent \z@ \centering \normalfont    
     \ifnum \c@secnumdepth >\m@ne
-        \LARGE\bfseries\prechaptername\countermapping{\zhnumber\thechapter}\postchaptername
+        \LARGE\bfseries\prechaptername\countermapping{\thechapter}\postchaptername
     \fi
     \hspace{1em}
     \interlinepenalty\@M
