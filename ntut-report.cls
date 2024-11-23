@@ -550,12 +550,12 @@
 }
 \newenvironment{Thanks}
 {
-    \chapter*{致謝}
+    \chapter*{Acknowledgements}
     \vspace{0.5cm}
     \
     \begin{spacing}{2}
     \phantomsection % for hyperref to register this
-    \addcontentsline{toc}{chapter}{致謝}
+    \addcontentsline{toc}{chapter}{Acknowledgements}
 }
 {
     \end{spacing}
@@ -734,7 +734,7 @@
            \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
     \@starttoc{toc}%
     \if@restonecol\twocolumn\fi
-    \addcontentsline{toc}{chapter}{目錄}
+    \addcontentsline{toc}{chapter}{Table of Contents}
     }
 \newcommand*\l@part[2]{%
   \ifnum \c@tocdepth >-2\relax
@@ -852,13 +852,13 @@
     \parindent 1em%
     \noindent
     \hb@xt@1.8em{\hss\@makefnmark}#1}
-\newcommand\contentsname{目錄}
-\newcommand\listfigurename{圖目錄}
-\newcommand\listtablename{表目錄}
+\newcommand\contentsname{Table of Contents}
+\newcommand\listfigurename{List of Figures}
+\newcommand\listtablename{List of Tables}
 \newcommand\bibname{Bibliography}
 \newcommand\indexname{Index}
-\newcommand\figurename{圖}
-\newcommand\tablename{表}
+\newcommand\figurename{Figure}
+\newcommand\tablename{Table}
 \newcommand\partname{Part}
 \newcommand\chaptername{Chapter}
 \newcommand\appendixname{Appendix}
