@@ -2,11 +2,44 @@
 
 \chapter{Purposed Algorithm}
 This section will provide a brief overview of the contents that will be discussed in this chapter: Section 3.1 will introduce the architecture of our algorithm and use a simple flowchart to provide a basic introduction to the proposed algorithm. Section 3.2 will provide a detailed description of our software and hardware specifications, as well as the setup procedures. Section 3.3 will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach.
-\section{The Architecture of Algorithm}
-
+\section{The Architecture of Algorithm} %Chapter 3.1
+    \begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{image/FlowChart.png}
+    \caption{FlowChart for Efficiency-based GP}
+    \label{fig: image}
+    \end{figure*}
 \section{Experimental Environment Setup}
 
 \section{Main Method}
+% \documentclass{article}
+
+\begin{algorithm}
+\caption{Efficiency-based GP to generate loss function}\label{alg:cap}
+\begin{algorithmic}
+    \State Initialize:$P = \space $x, $T =\space $x, $N = \space $x, $M_{ST} = \space0.5$
+    \State Randomly initialize population which include P trees
+    \State Evaluate GP fitness function $F$ for each individual in the population
+    \State Determine the best individual
+    \While{generation number < $T$}
+        \State Sample tournament G $\sim$ Uniform (P)
+        \State Select top $N$ trees from $G$ to form a set $S$
+        \For{Individual in $S$}
+                \If {$rand_1 < M_{ST}$}
+                \State Apply subtree mutation to the generated child
+            \Else
+                \State Apply one-point mutation to the individual
+            \EndIf
+            \If {Functional\_check() is true}
+                \State add individual to population
+            \EndIf
+        \EndFor
+        \State Evaluated GP fitness function $F$ for each generated child individual
+        \State Update the best individual
+        \State Select $P$ best trees from population to form a new population containing $P$ trees
+    \EndWhile
+\end{algorithmic}
+\end{algorithm}
 % \subsection{}
 % 定義定義定義定義定義定義\cite{latex2e}，定義定義定義定義，定義定義定義定義定義定義定義定義定義定義，定義定義。
 
