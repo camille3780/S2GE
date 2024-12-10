@@ -1,79 +1,79 @@
 \begin{ZhChapter}
 
-\chapter{Purposed Algorithm}
-This section will provide a brief overview of the contents that will be discussed in this chapter: Section 3.1 will introduce the architecture of our algorithm and use a simple flowchart to provide a basic introduction to the proposed algorithm. Section 3.2 will provide a detailed description of our software and hardware specifications, as well as the setup procedures. Section 3.3 will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach.
-\section{The Architecture of Algorithm} %Chapter 3.1
+    \chapter{Purposed Algorithm}
+    This section will provide a brief overview of the contents that will be discussed in this chapter: Section 3.1 will introduce the architecture of our algorithm and use a simple flowchart to provide a basic introduction to the proposed algorithm. Section 3.2 will provide a detailed description of our software and hardware specifications, as well as the setup procedures. Section 3.3 will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach.
+    \section{The Architecture of Algorithm} %Chapter 3.1
     \begin{figure*}[htbp]
-    \centering
-    \includegraphics[width = 1\textwidth]{image/FlowChart.png}
-    \caption{FlowChart for Efficiency-based GP}
-    \label{fig: image}
+        \centering
+        \includegraphics[width = 1\textwidth]{image/FlowChart.png}
+        \caption{FlowChart for Efficiency-based GP}
+        \label{fig: image}
     \end{figure*}
-\section{Experimental Environment Setup}
+    % \section{Experimental Environment Setup}
 
-\subsection{Software Setup}
-In our software setup, we run our code in Ubuntu 24.04. The Python version we employ is 3.8, and the Pytorch version is X. Within Python and Pytorch, we utilize the following packages: Some package.
+    % \subsection{Software Setup}
+    % In our software setup, we run our code in Ubuntu 24.04. The Python version we employ is 3.8, and the Pytorch version is X. Within Python and Pytorch, we utilize the following packages: Some package.
 
-\subsection{Hardware Setup}
-In our hardware setup, we run our code on an AMD Ryzen 5 5600X 6-Core Processor. The system is equipped with 32GB of memory, operating at a frequency of DDR4-3600MHz. Additionally, we utilize an NVIDIA GeForce RTX 3060 Ti GPU for our computational needs.
+    % \subsection{Hardware Setup}
+    % In our hardware setup, we run our code on an AMD Ryzen 5 5600X 6-Core Processor. The system is equipped with 32GB of memory, operating at a frequency of DDR4-3600MHz. Additionally, we utilize an NVIDIA GeForce RTX 3060 Ti GPU for our computational needs.
 
-\section{Main Method}
-% \documentclass{article}
+    \section{Main Method}
+    % \documentclass{article}
 
-\begin{algorithm}
-\caption{Efficiency-based GP to generate loss function}\label{alg:cap}
-\begin{algorithmic}
-    \State Initialize:$P = \space $x, $T =\space $x, $N = \space $x, $M_{ST} = \space0.5$
-    \State Randomly initialize population which include P trees
-    \State Evaluate GP fitness function $F$ for each individual in the population
-    \State Determine the best individual
-    \While{generation number < $T$}
-        \State Sample tournament G $\sim$ Uniform (P)
-        \State Select top $N$ trees from $G$ to form a set $S$
-        \For{Individual in $S$}
-                \If {$rand_1 < M_{ST}$}
-                \State Apply subtree mutation to the generated child
+    \begin{algorithm}
+        \caption{Efficiency-based GP to generate loss function}\label{alg:cap}
+        \begin{algorithmic}
+            \State Initialize:$P = \space $x, $T =\space $x, $N = \space $x, $M_{ST} = \space0.5$
+            \State Randomly initialize population which include P trees
+            \State Evaluate GP fitness function $F$ for each individual in the population
+            \State Determine the best individual
+            \While{generation number < $T$}
+            \State Sample tournament G $\sim$ Uniform (P)
+            \State Select top $N$ trees from $G$ to form a set $S$
+            \For{Individual in $S$}
+            \If {$rand_1 < M_{ST}$}
+            \State Apply subtree mutation to the generated child
             \Else
-                \State Apply one-point mutation to the individual
+            \State Apply one-point mutation to the individual
             \EndIf
             \If {Functional\_check() is true}
-                \State add individual to population
+            \State add individual to population
             \EndIf
-        \EndFor
-        \State Evaluated GP fitness function $F$ for each generated child individual
-        \State Update the best individual
-        \State Select $P$ best trees from population to form a new population containing $P$ trees
-    \EndWhile
-\end{algorithmic}
-\end{algorithm}
-% \subsection{}
-% 定義定義定義定義定義定義\cite{latex2e}，定義定義定義定義，定義定義定義定義定義定義定義定義定義定義，定義定義。
+            \EndFor
+            \State Evaluated GP fitness function $F$ for each generated child individual
+            \State Update the best individual
+            \State Select $P$ best trees from population to form a new population containing $P$ trees
+            \EndWhile
+        \end{algorithmic}
+    \end{algorithm}
+    % \subsection{}
+    % 定義定義定義定義定義定義\cite{latex2e}，定義定義定義定義，定義定義定義定義定義定義定義定義定義定義，定義定義。
 
-% \begin{table*}[htbp]
-%     \centering
-%     \caption{表格範例標題} \label{tab: complexity}
-%     \makebox[\linewidth][c]{
-%     \renewcommand\arraystretch{1.2}{
-%         \begin{tabular}{| l | c  c  c  c |}
-%         \hline
-%         Protocol & $P$ & $CS_1$ & $CS_2$ & $RG$ \\
-%         \hline
-%         MSSMul & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
-%         SC & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
-%         \hline 
-%         \end {tabular}
-%     }}
-% \end {table*}
+    % \begin{table*}[htbp]
+    %     \centering
+    %     \caption{表格範例標題} \label{tab: complexity}
+    %     \makebox[\linewidth][c]{
+    %     \renewcommand\arraystretch{1.2}{
+    %         \begin{tabular}{| l | c  c  c  c |}
+    %         \hline
+    %         Protocol & $P$ & $CS_1$ & $CS_2$ & $RG$ \\
+    %         \hline
+    %         MSSMul & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
+    %         SC & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
+    %         \hline 
+    %         \end {tabular}
+    %     }}
+    % \end {table*}
 
-% \section{模型說明（小標）}
+    % \section{模型說明（小標）}
 
-% 說明說明說明說明，說明說明說明說明說明說明說明說明說明說明說明說明，說明說明說明說明說明說明說明說明。
+    % 說明說明說明說明，說明說明說明說明說明說明說明說明說明說明說明說明，說明說明說明說明說明說明說明說明。
 
-% \begin{figure*}[htbp]
-%     \centering
-%     \includegraphics[width = 0.5\textwidth]{image.jpeg}
-%     \caption{Cool train station}
-%     \label{fig: image}
-% \end{figure*}
+    % \begin{figure*}[htbp]
+    %     \centering
+    %     \includegraphics[width = 0.5\textwidth]{image.jpeg}
+    %     \caption{Cool train station}
+    %     \label{fig: image}
+    % \end{figure*}
 
 \end{ZhChapter}
