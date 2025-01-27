@@ -23,21 +23,25 @@ This section will provide a brief overview of this chapter: First we will introd
 \begin{algorithm}
     \caption{Efficiency-based GP to generate loss function}\label{alg:cap}
     \begin{algorithmic}
-        \State Initialize:$P = \space $x, $T =\space $x, $N = \space $x, $M_{ST} = \space0.5$
+        \State Initialize: \space $P = \space 8$, $T =\space 12$, $G =\space P*3/4$, $N = \space G/2$, $C_r = \space0.5$, $M_{ST} = \space0.3$, $M_N = \space0.1$
         \State Randomly initialize population which include P trees
         \State Evaluate GP fitness function $F$ for each individual in the population
         \State Determine the best individual
         \While{generation number < $T$}
-        \State Sample tournament G $\sim$ Uniform (P)
+        \State $S$ = Sample tournament G $\sim$ Uniform (P)
         \State Select top $N$ trees from $G$ to form a set $S$
         \For{Individual in $S$}
-        \If {$rand_1 < M_{ST}$}
-        \State Apply subtree mutation to the generated child
+        \If {$rand_1 < 0.5$}
+        \State random\_individual = Randomly select a individual in $S$ except Individual
         \Else
-        \State Apply one-point mutation to the individual
+        \State random\_individual = Randomly generated tree
         \EndIf
-        \If {Functional\_check() is true}
-        \State add individual to population
+        \State generated\_child = Crossover(Individual, random\_individual)
+        \If {$rand_2 < M_{ST}$}
+        \State Apply subtree mutation to the generated\_child
+        \EndIf
+        \If {$rand_3 < M_N$}
+        \State Apply one-point mutation to the generated\_child
         \EndIf
         \EndFor
         \State Evaluated GP fitness function $F$ for each generated child individual
