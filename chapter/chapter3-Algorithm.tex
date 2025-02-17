@@ -62,15 +62,52 @@ This section will provide a brief overview of this chapter: First we will introd
     \renewcommand\arraystretch{1.2}{
         \begin{tabular}{| l | c  c  c  c |}
         \hline
-        Package Type & Software Name & Version & Remark & License \\
+        Software Type & Software Name & Version & Remark & License \\
         \hline
-        Operating System & Ubuntu &  24.04 & N/A & N/A \\
-        Programming Language & Python & 3.11 & N/A & N/A\\
-        Programming Language & Pytorch & N/A & N/A & N/A\\
+        Operating System & Windows &  11 & N/A & N/A \\
+        Programming Language & Python & 3.9.18 & N/A & N/A\\
         \hline
         \end {tabular}
     }}
 \end {table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Software requirements} \label{tab: packageSpec}
+\makebox[\linewidth][c]{
+    \renewcommand\arraystretch{1.2}{
+        \begin{tabular}{| l | c  c |}
+        \hline
+        Package Name/Version & Imported from & License \\
+        \hline
+        tensorflow/2.6.0 & N/A & Apache License 2.0\\
+        numpy/1.20.3 & N/A & modified BSD license\\
+        cudnn/8.2.1 & N/A & N/A\\
+        os & N/A & N/A\\
+        copy  & N/A & N/A\\
+        time  & N/A & N/A\\
+        math  & N/A & N/A\\
+        random & N/A & N/A\\
+        datetime & datetime & N/A\\
+        cmp\_to\_key & functools & N/A\\
+        Sequential & tensorflow.keras.models & N/A\\
+        Dense & tensorflow.keras.layers & N/A\\
+        Flatten & tensorflow.keras.layers & N/A\\
+        Dropout & tensorflow.keras.layers & N/A\\
+        UpSampling2D & tensorflow.keras.layers & N/A\\
+        BatchNormalization & tensorflow.keras.layers & N/A\\
+        InceptionV3 & tensorflow.keras.applications.inception\_v3 & N/A\\
+        preprocess\_input & tensorflow.keras.applications.inception\_v3 & N/A\\
+        ReduceLROnPlateau & tensorflow.keras.callbacks & N/A\\
+        to\_categorical & tensorflow.keras.utils & N/A\\
+        train\_test\_split/1.5.2 & sklearn.model\_selection & N/A\\
+        ImageDataGenerator & tensorflow.keras.preprocessing.image & N/A\\
+        np\_config & tensorflow.python.ops.numpy\_ops & N/A\\
+        \hline
+        \end {tabular}
+    }}
+\end {table*}
+
 Table \ref{tab: softwareSpec} shows our software requirements. We run our code in Ubuntu 24.04. The Python version we employ is 3.8, and the Pytorch version is X. Within Python and Pytorch, we utilize the following packages: Some package.
 
 \begin{table*}[htbp]
@@ -82,9 +119,9 @@ Table \ref{tab: softwareSpec} shows our software requirements. We run our code i
         \hline
         Hardware Type & Name \\
         \hline
-        CPU & AMD Ryzen 5 5600X 6-Core Processor \\
-        Memory & DDR4-3600MHz 32 GB \\
-        Graphic Card & NVIDIA GeForce RTX 3060 Ti \\
+        CPU & 13th Gen Intel(R) Core(TM) i7-13700 \\
+        Memory & DDR5-5600MHz 32 GB \\
+        Graphic Card & NVIDIA GeForce RTX 4060 \\
         \hline
         \end {tabular}
     }}
