@@ -55,6 +55,8 @@ This section will provide a brief overview of this chapter: First we will introd
 
 \subsection{Requirements}
 
+Table \ref{tab: softwareSpec} outlines our software requirements. Our code execution environment is Windows 11. We utilize Python version 3.9.18 and TensorFlow version 2.6.0. The specific packages used within Python and TensorFlow are detailed in Table \ref{tab: packageSpec}.
+
 \begin{table*}[htbp]
 \centering
 \caption{Software requirements} \label{tab: softwareSpec}
@@ -73,7 +75,7 @@ This section will provide a brief overview of this chapter: First we will introd
 
 \begin{table*}[htbp]
 \centering
-\caption{Software requirements} \label{tab: packageSpec}
+\caption{Python package requirements} \label{tab: packageSpec}
 \makebox[\linewidth][c]{
     \renewcommand\arraystretch{1.2}{
         \begin{tabular}{| l | c  c |}
@@ -108,7 +110,7 @@ This section will provide a brief overview of this chapter: First we will introd
     }}
 \end {table*}
 
-Table \ref{tab: softwareSpec} shows our software requirements. We run our code in Ubuntu 24.04. The Python version we employ is 3.8, and the Pytorch version is X. Within Python and Pytorch, we utilize the following packages: Some package.
+Table \ref{tab: hardwareSpec} presents our hardware requirements. The computer we used to execute our code is equipped with a 13th Gen Intel(R) Core(TM) i7-13700 CPU, 32GB of memory operating at a frequency of DDR5-5600MHz, and an NVIDIA GeForce RTX 4060 GPU to meet our computational needs.
 
 \begin{table*}[htbp]
 \centering
@@ -127,8 +129,48 @@ Table \ref{tab: softwareSpec} shows our software requirements. We run our code i
     }}
 \end {table*}
 
-Table \ref{tab: hardwareSpec} shows our hardware requirements. We run our code on an AMD Ryzen 5 5600X 6-Core Processor. The system is equipped with 32GB of memory, operating at a frequency of DDR4-3600MHz. Additionally, we utilize an NVIDIA GeForce RTX 3060 Ti GPU for our computational needs.
 \subsection{Environment Setup}
+
+The following section will describe how to properly set up the environment we used to conduct our experiment. First, we used Anaconda as our package management tool for the implementation. Therefore, you must first visit the Anaconda official website (https://www.anaconda.com/download) to download the software. As shown in figure \ref{fig: conda}, click the Download button to complete the download.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/conda.jpg}
+    \caption{Anaconda official website}
+    \label{fig: conda}
+\end{figure*}
+
+After installation, we need to create a new environment to ensure the independence of all the packages. In Anaconda prompt, enter conda create --name environment-name to create a new environment, as shown in figure \ref{fig: createEnv}. Next, enter conda activate environment-name to activate the environment just like the first prompt entered in figure \ref{fig: tensorflow}.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/createEnv.png}
+    \caption{Conda prompt for creating new environment}
+    \label{fig: createEnv}
+\end{figure*}
+
+Since directly installing TensorFlow may result in the installation of incompatible versions of NumPy, we first use the following command to download version 1.20.3 of NumPy: conda install numpy=1.20, as shown in figure \ref{fig: numpy}. Afterward, we can install the GPU version of TensorFlow by entering the following command in the Anaconda prompt: conda install tensorflow-gpu, as shown in figure \ref{fig: tensorflow}. Finally, we need to download Scikit-learn to split the dataset during the model training process. As shown in figure \ref{fig: sklearn}, enter the following command to complete the final installation step: conda install scikit-learn.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/numpy.png}
+    \caption{Install numpy in conda environment}
+    \label{fig: numpy}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/tensorflow.png}
+    \caption{Install tensorflow in conda environment}
+    \label{fig: tensorflow}
+\end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/sklearn.png}
+    \caption{Install scikit-learn in conda environment}
+    \label{fig: sklearn}
+\end{figure*}
 
 \subsection{Implementation Steps}
 % \subsection{}
