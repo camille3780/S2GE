@@ -1,7 +1,7 @@
 \begin{ZhChapter}
 
 \chapter{Proposed Algorithm}
-This section will provide a brief overview of this chapter: First we will introduce the architecture of our algorithm and use a simple flowchart to provide a basic introduction to the proposed algorithm. Next we want to provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach. Lastly we will provide a detailed description of our software and hardware specifications, as well as the setup procedures.
+In this chapter, we will introduce the architecture and flowchart of our algorithm. Next, we will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach. Subsequently, we will present a detailed description of our software and hardware specifications, as well as the setup procedures. Finally, we will execute the experiment and describe how we implemented our concept and successfully completed the entire experiment.
 \section{The Architecture of Algorithm} %Chapter 3.1
 \begin{figure*}[htbp]
     \centering
@@ -19,7 +19,7 @@ This section will provide a brief overview of this chapter: First we will introd
 
 \section{Main Method}
 % \documentclass{article}
-
+Based on the architecture we introduced on section 3.1, the pseudo code of this algorithm is presented as below.
 \begin{algorithm}
     \caption{Efficiency-based GP to generate loss function}\label{alg:cap}
     \begin{algorithmic}
@@ -52,7 +52,7 @@ This section will provide a brief overview of this chapter: First we will introd
 \end{algorithm}
 
 \section{Implementation Details}
-
+To implement our experiment, the hardware and software requirements are first defined in Section 3.3.1. Next, the environment setup steps are described in Section 3.3.2. Finally, the implementation steps are explained in Section 3.3.3.
 \subsection{Requirements}
 
 Table \ref{tab: softwareSpec} outlines our software requirements. Our code execution environment is Windows 11. We utilize Python version 3.9.18 and TensorFlow version 2.6.0. The specific packages used within Python and TensorFlow are detailed in Table \ref{tab: packageSpec}.
@@ -62,12 +62,12 @@ Table \ref{tab: softwareSpec} outlines our software requirements. Our code execu
 \caption{Software requirements} \label{tab: softwareSpec}
 \makebox[\linewidth][c]{
     \renewcommand\arraystretch{1.2}{
-        \begin{tabular}{| l | c  c  c  c |}
+        \begin{tabular}{| l | c  c |}
         \hline
-        Software Type & Software Name & Version & Remark & License \\
+        Software Type & Software Name & Version \\
         \hline
-        Operating System & Windows &  11 & N/A & N/A \\
-        Programming Language & Python & 3.9.18 & N/A & N/A\\
+        Operating System & Windows &  11 \\
+        Programming Language & Python & 3.9.18\\
         \hline
         \end {tabular}
     }}
@@ -131,7 +131,7 @@ Table \ref{tab: hardwareSpec} presents our hardware requirements. The computer w
 
 \subsection{Environment Setup}
 
-The following section will describe how to properly set up the environment we used to conduct our experiment. First, we used Anaconda as our package management tool for the implementation. Therefore, you must first visit the Anaconda official website (https://www.anaconda.com/download) to download the software. As shown in figure \ref{fig: conda}, click the Download button to complete the download.
+The following section will describe how to properly set up the environment we used to conduct our experiment. First, we used Anaconda as our package management tool for the implementation. Therefore, you must first visit the Anaconda official website (\url{https://www.anaconda.com/download}) to download the software. As shown in figure \ref{fig: conda}, click the Download button to complete the download.
 
 \begin{figure*}[htbp]
     \centering
@@ -140,7 +140,7 @@ The following section will describe how to properly set up the environment we us
     \label{fig: conda}
 \end{figure*}
 
-After installation, we need to create a new environment to ensure the independence of all the packages. In Anaconda prompt, enter conda create --name environment-name to create a new environment, as shown in figure \ref{fig: createEnv}. Next, enter conda activate environment-name to activate the environment just like the first prompt entered in figure \ref{fig: tensorflow}.
+After installation, we need to create a new environment to ensure the independence of all the packages. In Anaconda prompt, enter \verb|conda create --name environment-name| to create a new environment, as shown in figure \ref{fig: createEnv}. Next, enter \verb|conda activate environment-name| to activate the environment just like the first prompt entered in figure \ref{fig: tensorflow}.
 
 \begin{figure*}[htbp]
     \centering
@@ -149,7 +149,7 @@ After installation, we need to create a new environment to ensure the independen
     \label{fig: createEnv}
 \end{figure*}
 
-Since directly installing TensorFlow may result in the installation of incompatible versions of NumPy, we first use the following command to download version 1.20.3 of NumPy: conda install numpy=1.20, as shown in figure \ref{fig: numpy}. Afterward, we can install the GPU version of TensorFlow by entering the following command in the Anaconda prompt: conda install tensorflow-gpu, as shown in figure \ref{fig: tensorflow}. Finally, we need to download Scikit-learn to split the dataset during the model training process. As shown in figure \ref{fig: sklearn}, enter the following command to complete the final installation step: conda install scikit-learn.
+Since directly installing TensorFlow may result in the installation of incompatible versions of NumPy, we first use the command shown in figure \ref{fig: numpy} to download version 1.20.3 of  NumPy: \verb|conda install numpy=1.20|. Afterward, we can install the GPU version of TensorFlow by entering the following command in the Anaconda prompt: \verb|conda install tensorflow-gpu|, as shown in figure \ref{fig: tensorflow}. Finally, we need to download Scikit-learn to split the dataset during the model training process. As shown in figure \ref{fig: sklearn}, enter the following command to complete the final installation step: \verb|conda install scikit-learn|.
 
 \begin{figure*}[htbp]
     \centering
