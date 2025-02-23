@@ -2,57 +2,16 @@
 
 \chapter{Proposed Algorithm}
 In this chapter, we will introduce the architecture and flowchart of our algorithm. Next, we will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach. Subsequently, we will present a detailed description of our software and hardware specifications, as well as the setup procedures. Finally, we will execute the experiment and describe how we implemented our concept and successfully completed the entire experiment.
-\section{The Architecture of Algorithm} %Chapter 3.1
+\section{Main Method} %Chapter 3.1
 \begin{figure*}[htbp]
     \centering
     \includegraphics[width = 1\textwidth]{image/FlowChart.png}
     \caption{FlowChart for Efficiency-based GP}
     \label{fig: FlowChart}
 \end{figure*}
-% \section{Experimental Environment Setup}
-
-% \subsection{Software Setup}
-% In our software setup, we run our code in Ubuntu 24.04. The Python version we employ is 3.8, and the Pytorch version is X. Within Python and Pytorch, we utilize the following packages: Some package.
-
-% \subsection{Hardware Setup}
-% In our hardware setup, we run our code on an AMD Ryzen 5 5600X 6-Core Processor. The system is equipped with 32GB of memory, operating at a frequency of DDR4-3600MHz. Additionally, we utilize an NVIDIA GeForce RTX 3060 Ti GPU for our computational needs.
-
-\section{Main Method}
-% \documentclass{article}
-Based on the architecture we introduced on section 3.1, the pseudo code of this algorithm is presented as below.
-\begin{algorithm}
-    \caption{Efficiency-based GP to generate loss function}\label{alg:cap}
-    \begin{algorithmic}
-        \State Initialize: \space $P = \space 8$, $T =\space 12$, $G =\space P*3/4$, $N = \space G/2$, $C_r = \space0.5$, $M_{ST} = \space0.3$, $M_N = \space0.1$
-        \State Randomly initialize population which include P trees
-        \State Evaluate GP fitness function $F$ for each individual in the population
-        \State Determine the best individual
-        \While{generation number < $T$}
-        \State $S$ = Sample tournament G $\sim$ Uniform (P)
-        \State Select top $N$ trees from $G$ to form a set $S$
-        \For{Individual in $S$}
-        \If {$rand_1 < 0.5$}
-        \State random\_individual = Randomly select a individual in $S$ except Individual
-        \Else
-        \State random\_individual = Randomly generated tree
-        \EndIf
-        \State generated\_child = Crossover(Individual, random\_individual)
-        \If {$rand_2 < M_{ST}$}
-        \State Apply subtree mutation to the generated\_child
-        \EndIf
-        \If {$rand_3 < M_N$}
-        \State Apply one-point mutation to the generated\_child
-        \EndIf
-        \EndFor
-        \State Evaluated GP fitness function $F$ for each generated child individual
-        \State Update the best individual
-        \State Select $P$ best trees from population to form a new population containing $P$ trees
-        \EndWhile
-    \end{algorithmic}
-\end{algorithm}
 
 \section{Implementation Details}
-To implement our experiment, the hardware and software requirements are first defined in Section 3.3.1. Next, the environment setup steps are described in Section 3.3.2. Finally, the implementation steps are explained in Section 3.3.3.
+To implement our experiment, the hardware and software requirements are first defined in Section 3.2.1. Next, the environment setup steps are described in Section 3.2.2. Finally, the implementation steps are explained in Section 3.2.3.
 \subsection{Requirements}
 
 Table \ref{tab: softwareSpec} outlines our software requirements. Our code execution environment is Windows 11. We utilize Python version 3.9.18 and TensorFlow version 2.6.0. The specific packages used within Python and TensorFlow are detailed in Table \ref{tab: packageSpec}.
@@ -173,34 +132,36 @@ Since directly installing TensorFlow may result in the installation of incompati
 \end{figure*}
 
 \subsection{Implementation Steps}
-% \subsection{}
-% 定義定義定義定義定義定義\cite{latex2e}，定義定義定義定義，定義定義定義定義定義定義定義定義定義定義，定義定義。
-
-% \begin{table*}[htbp]
-%     \centering
-%     \caption{表格範例標題} \label{tab: complexity}
-%     \makebox[\linewidth][c]{
-%     \renewcommand\arraystretch{1.2}{
-%         \begin{tabular}{| l | c  c  c  c |}
-%         \hline
-%         Protocol & $P$ & $CS_1$ & $CS_2$ & $RG$ \\
-%         \hline
-%         MSSMul & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
-%         SC & $O(1)$, $O(1)$, N/A & $O(n-t)$, $O(n)$, $O(1)$ & $O(n-t)$, $O(n)$, N/A & $O(1)$, $O(n)$, $O(n)$ \\
-%         \hline 
-%         \end {tabular}
-%     }}
-% \end {table*}
-
-% \section{模型說明（小標）}
-
-% 說明說明說明說明，說明說明說明說明說明說明說明說明說明說明說明說明，說明說明說明說明說明說明說明說明。
-
-% \begin{figure*}[htbp]
-%     \centering
-%     \includegraphics[width = 0.5\textwidth]{image.jpeg}
-%     \caption{Cool train station}
-%     \label{fig: image}
-% \end{figure*}
+Based on the architecture we introduced on section 3.1, the pseudo code of this algorithm is presented as below.
+\begin{algorithm}
+    \caption{Efficiency-based GP to generate loss function}\label{alg:cap}
+    \begin{algorithmic}
+        \State Initialize: \space $P = \space 8$, $T =\space 12$, $G =\space P*3/4$, $N = \space G/2$, $C_r = \space0.5$, $M_{ST} = \space0.3$, $M_N = \space0.1$
+        \State Randomly initialize population which include P trees
+        \State Evaluate GP fitness function $F$ for each individual in the population
+        \State Determine the best individual
+        \While{generation number < $T$}
+        \State $S$ = Sample tournament G $\sim$ Uniform (P)
+        \State Select top $N$ trees from $G$ to form a set $S$
+        \For{Individual in $S$}
+        \If {$rand_1 < 0.5$}
+        \State random\_individual = Randomly select a individual in $S$ except Individual
+        \Else
+        \State random\_individual = Randomly generated tree
+        \EndIf
+        \State generated\_child = Crossover(Individual, random\_individual)
+        \If {$rand_2 < M_{ST}$}
+        \State Apply subtree mutation to the generated\_child
+        \EndIf
+        \If {$rand_3 < M_N$}
+        \State Apply one-point mutation to the generated\_child
+        \EndIf
+        \EndFor
+        \State Evaluated GP fitness function $F$ for each generated child individual
+        \State Update the best individual
+        \State Select $P$ best trees from population to form a new population containing $P$ trees
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
 
 \end{ZhChapter}
