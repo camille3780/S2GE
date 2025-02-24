@@ -3,6 +3,18 @@
 \chapter{Proposed Algorithm}
 In this chapter, we will introduce the architecture and flowchart of our algorithm. Next, we will provide an in-depth explanation of our proposed algorithm, including the underlying concepts and the rationale behind our approach. Subsequently, we will present a detailed description of our software and hardware specifications, as well as the setup procedures. Finally, we will execute the experiment and describe how we implemented our concept and successfully completed the entire experiment.
 \section{Main Method} %Chapter 3.1
+Figure \ref{fig: softwareStack} illustrates our software stack. On our existing hardware, we use Windows 11 as our operating system. In addition, we use Python 3.9.18 as the programming language for this research. Based on Python 3.9.18, the main packages we use are TensorFlow, NumPy, and Scikit-learn.
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width = 0.75\textwidth]{image/softwareStack.png}
+    \caption{Software stack for Efficiency-based GP}
+    \label{fig: softwareStack}
+\end{figure*}
+
+In previous research \cite{akhmedova2024generationlossfunctionimage}, we observed that genetic operations are performed on the entire population, requiring the evaluation of the entire new population after each complete set of genetic operations. However, the evaluation process is time-consuming. Therefore, in this study, we will employ the concept of a sample tournament to select certain individuals rather than the entire population for genetic operations. By doing so, we only need to evaluate the newly generated individuals. Figure \ref{fig: FlowChart} illustrates the conceptual flowchart of this study.
+
+As illustrated in the figure \ref{fig: FlowChart}, we initialize a population consisting of $P$ individuals before commencing the experiment. Once initialized, we evaluate all individuals, store their scores, and identify the best score for subsequent analysis and research. The process then enters a loop, continuing until the generation number reaches the specified value. Initially in this loop, we use a sample tournament to randomly select $N$ individuals from the population, followed by choosing the top $X$ individuals for genetic operations (crossover and mutation). The offspring of these $X$ individuals are then evaluated and added to the population. We update the best-performing individual and remove the poorly performing individuals until the population size returns to $P$. Upon concluding the loop, we generate the best-performing loss function and conclude the experiment.
+
 \begin{figure*}[htbp]
     \centering
     \includegraphics[width = 1\textwidth]{image/FlowChart.png}
