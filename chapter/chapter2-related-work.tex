@@ -12,39 +12,39 @@
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.3}{
                 \begin{tabular}{| l | p{12cm} |}
-                \hline
-                \textbf{Feature (with Reference)} & \textbf{Description} \\
-                \hline
-                Destination Port~\cite{tang2019deep} & Specific port targets (e.g., 22, 23, 80, 443) are often associated with attacks. Abnormal access to these ports may suggest behaviors such as scanning, DDoS, or brute-force intrusion. \\
-                \hline
-                Flow Duration~\cite{tharewal2022intrusion} & Extremely short or long connection durations within brief timeframes may signal scanning activity or data exfiltration. \\
-                \hline
-                Total Forward Packets~\cite{sharafaldin2018cicflowmeter} & Unusually high or low packet counts in one direction may indicate abnormal sessions or flooding behavior. \\
-                \hline
-                Packet Length~\cite{tang2016deep} & Anomalies in packet size—whether fixed, too long, or too short—often reflect malicious traffic like botnet propagation or worms. \\
-                \hline
-                Protocol Type~\cite{tharewal2022intrusion} & Sudden increases in uncommon protocols (e.g., ICMP, UDP) may reveal attempts to exploit protocol vulnerabilities or bypass filters. \\
-                \hline
-                Source IP / Destination IP~\cite{tavallaee2009kdd} & Repeated access from abnormal IP addresses, or sudden surges in novel IP sources, are indicative of scanning, spoofing, or DDoS activity. \\
-                \hline
-                Flow Bytes per Second~\cite{tang2016deep} & Sharp fluctuations—surges or drops—in flow byte rate may suggest DoS attacks or unauthorized data transfer. \\
-                \hline
-                TCP Flags~\cite{sharafaldin2018cicflowmeter} & Unusual combinations (e.g., SYN, FIN, RST) can indicate stealth scans or TCP-based flooding. \\
-                \hline
-                Number of Connections~\cite{tang2016deep} & A large number of new connections established by a single IP in a short time often reflects worm propagation or botnet coordination. \\
-                \hline
+                    \hline
+                    \textbf{Feature (with Reference)}                        & \textbf{Description}                                                                                                                                                                    \\
+                    \hline
+                    Destination Port~\cite{tang2016deep}                     & Specific port targets (e.g., 22, 23, 80, 443) are often associated with attacks. Abnormal access to these ports may suggest behaviors such as scanning, DDoS, or brute-force intrusion. \\
+                    \hline
+                    Flow Duration~\cite{tharewal2022intrusion}               & Extremely short or long connection durations within brief timeframes may signal scanning activity or data exfiltration.                                                                 \\
+                    \hline
+                    Total Forward Packets~\cite{sharafaldin2018cicflowmeter} & Unusually high or low packet counts in one direction may indicate abnormal sessions or flooding behavior.                                                                               \\
+                    \hline
+                    Packet Length~\cite{tang2016deep}                        & Anomalies in packet size—whether fixed, too long, or too short—often reflect malicious traffic like botnet propagation or worms.                                                        \\
+                    \hline
+                    Protocol Type~\cite{tharewal2022intrusion}               & Sudden increases in uncommon protocols (e.g., ICMP, UDP) may reveal attempts to exploit protocol vulnerabilities or bypass filters.                                                     \\
+                    \hline
+                    Source IP / Destination IP~\cite{tavallaee2009kdd}       & Repeated access from abnormal IP addresses, or sudden surges in novel IP sources, are indicative of scanning, spoofing, or DDoS activity.                                               \\
+                    \hline
+                    Flow Bytes per Second~\cite{tang2016deep}                & Sharp fluctuations—surges or drops—in flow byte rate may suggest DoS attacks or unauthorized data transfer.                                                                             \\
+                    \hline
+                    TCP Flags~\cite{sharafaldin2018cicflowmeter}             & Unusual combinations (e.g., SYN, FIN, RST) can indicate stealth scans or TCP-based flooding.                                                                                            \\
+                    \hline
+                    Number of Connections~\cite{tang2016deep}                & A large number of new connections established by a single IP in a short time often reflects worm propagation or botnet coordination.                                                    \\
+                    \hline
                 \end{tabular}
             }}
-        \end{table*}
-        
-        
+    \end{table*}
 
-        
+
+
+
 
     \section{Tokenization}
     Following feature extraction, the next critical step is the tokenization process, which prepares network traffic data for semantic embedding. Each data record typically contains multiple fields—such as \texttt{Port}, \texttt{Protocol}, and \texttt{SrcIP}—representing structural and behavioral attributes of a network flow. To ensure consistency and distinguishability among features during embedding, we adopt a composite tokenization strategy that combines each field name with its corresponding value to form a unique token string. For instance, a sample token may take the form \texttt{Protocol:TCP} or \texttt{DstPort:443}.
-    
-    This strategy preserves the semantic association between field-value pairs without relying on predefined vocabularies, making it particularly suitable for dynamic and heterogeneous IoT environments. Each composite token is subsequently encoded using hash-based mapping techniques \ref{sec:hash_embedding}, thereby eliminating the need for extensive memory allocation or manually constructed token dictionaries. By treating each token as a self-contained semantic unit, this method also enhances the model’s ability to generalize to previously unseen feature combinations, ultimately improving both the adaptability and scalability of the proposed system~\cite{weinberger2009feature}.
+
+    This strategy preserves the semantic association between field-value pairs without relying on predefined vocabularies, making it particularly suitable for dynamic and heterogeneous IoT environments. Each composite token is subsequently encoded using hash-based mapping techniques, which is described in section \ref{sec:hash_embedding}, thereby eliminating the need for extensive memory allocation or manually constructed token dictionaries. By treating each token as a self-contained semantic unit, this method also enhances the model’s ability to generalize to previously unseen feature combinations, ultimately improving both the adaptability and scalability of the proposed system~\cite{weinberger2009feature}.
 
 
     \begin{table*}[htbp]
@@ -54,35 +54,35 @@
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.2}{
                 \begin{tabular}{| l | l |}
-                \hline
-                \textbf{Feature Field} & \textbf{Tokenized Representation} \\
-                \hline
-                Protocol = TCP & Protocol:TCP \\
-                \hline
-                Destination Port = 443 & DstPort:443 \\
-                \hline
-                Source Port = 80 & SrcPort:80 \\
-                \hline
-                Source IP = 192.168.0.1 & SrcIP:192.168.0.1 \\
-                \hline
-                Flow Duration = 120000 & FlowDuration:120000 \\
-                \hline
-                Payload Bytes = 56 & PayloadBytes:56 \\
-                \hline
-                Packet Count = 10 & PacketCount:10 \\
-                \hline
-                Flag = ACK & Flag:ACK \\
-                \hline
-                Protocol = ICMP & Protocol:ICMP \\
-                \hline
-                Destination IP = 10.0.0.5 & DstIP:10.0.0.5 \\
-                \hline
+                    \hline
+                    \textbf{Feature Field}    & \textbf{Tokenized Representation} \\
+                    \hline
+                    Protocol = TCP            & Protocol:TCP                      \\
+                    \hline
+                    Destination Port = 443    & DstPort:443                       \\
+                    \hline
+                    Source Port = 80          & SrcPort:80                        \\
+                    \hline
+                    Source IP = 192.168.0.1   & SrcIP:192.168.0.1                 \\
+                    \hline
+                    Flow Duration = 120000    & FlowDuration:120000               \\
+                    \hline
+                    Payload Bytes = 56        & PayloadBytes:56                   \\
+                    \hline
+                    Packet Count = 10         & PacketCount:10                    \\
+                    \hline
+                    Flag = ACK                & Flag:ACK                          \\
+                    \hline
+                    Protocol = ICMP           & Protocol:ICMP                     \\
+                    \hline
+                    Destination IP = 10.0.0.5 & DstIP:10.0.0.5                    \\
+                    \hline
                 \end{tabular}
             }}
-        \end{table*}
-        
+    \end{table*}
 
-    \section{Hash Embedding}
+
+    \section{Hash Embedding} \label{sec:hash_embedding}
     Hash Embedding is a common lightweight feature encoding technology, which is particularly suitable for structured, high-dimensional, or large-number-of-categories network data. Its core approach is to convert each field name/field value (or a combination of the two) into a set of indexes through a hash function (such as MurmurHash3), and query the embedding table to obtain a fixed-length semantic vector.
     The main method is to combine the (field name, field value) of each data sample and pass it through a hash function such as MurmurHash3 to obtain a set of row/col indexes. This set of indices is then used to query a multi-dimensional embedding table, where an initial random, trainable semantic vector is stored at each position. The multi-field embedding vectors are concatenated (flattened) or aggregated, and then the data is given to the anomaly detection model for learning and inference.
     Weinberger et al. \cite{pang2021deep} proposed Feature Hashing to solve the coding efficiency problem of high-dimensional sparse data. L. Zhu et al. \cite{weinberger2009feature} combined Feature Hashing with a multi-layer perception for IoT intrusion anomaly detection and proved that it can significantly reduce the number of model parameters and improve computing efficiency. MurmurHash3 is widely used to replace traditional hashing techniques because of its uniform distribution, fast calculation, and cons.istency across languages.
@@ -103,6 +103,6 @@
 
     Compared to one-hot encoding or manually crafted features, semantic vectors provide a richer and more scalable representation, particularly when combined with deep learning models. In this work, we construct semantic vectors from tokenized field-value pairs using a hash-based embedding scheme followed by an MLP encoder. This method ensures that semantic relationships among network features are preserved while maintaining computational efficiency.
 
-   
+
 
 \end{ZhChapter}
