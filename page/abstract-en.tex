@@ -2,41 +2,38 @@
 \begin{EnAbstract}
     \begin{EnAbstractItems}
         % 論文名稱，請在 ntut-labels.tex 定義
-        \noindent \text Title: \eTitle
+        %\noindent \text Title: \eTitle
 
         % 論文總頁數，同最後一頁阿拉伯數字頁碼
         % Page number, same as the page number of the last page, not the total pages in pdf file.
-        \noindent \text Pages: (Fill it)
+        %\noindent \text Pages: (Fill it)
 
         % 校所別，請在 ntut-labels.tex 定義
-        \noindent \text School: \univEname
+        %\noindent \text School: \univEname
 
         % 系所別，請在 ntut-labels.tex 定義
-        \noindent \text Department: \deptEname
+        %\noindent \text Department: \deptEname
 
         % 畢業時間，請在 ntut-labels.tex 定義
-        \noindent \text Time: \eMonth, \eYear
+        %\noindent \text Time: \eMonth, \eYear
 
         % 學位，請在 ntut-labels.tex 定義
-        \noindent \text Degree: \degreeEname
+        %\noindent \text Degree: \degreeEname
 
         % 研究生，請在 ntut-labels.tex 定義
-        \noindent \text Researcher: \myEname
+        %\noindent \text Researcher: \myEname
 
         % 指導教授，請在 ntut-labels.tex 定義
-        \noindent \text Advisor: \advisorEname
+        %\noindent \text Advisor: \advisorEname
 
         % 關鍵詞，請自己填，多個關鍵字以逗號 "," 隔開
-        \noindent \text Keyword: Image Classification, Genetic Programming, Loss Function, Deep Learning
+        \noindent \text Keyword: IoT Security, Information Security, Anomaly Detection, Multilayer Perceptron, Semantic Vector
 
     \end{EnAbstractItems}
 
     \begin{EnAbstractDescription}
-        In the recent, with the rapid rise of deep learning, image classification models have quickly become one of the most popular and widely known models. When training such models, the steps are broadly divided into the following: preparing image datasets, dividing them into training, validation and testing sets as needed, training the model, evaluating the model, and repeating these steps until the ideal result is met or the computational resources are exhausted.
+        As network environments become increasingly complex and dynamic, traditional intrusion detection methods struggle to keep pace with evolving threats and high-volume traffic. This paper proposes an efficient anomaly detection framework that leverages hash-based token embedding and a lightweight multi-layer perceptron (MLP) for the semantic representation of network flows. By transforming feature values into semantic tokens and utilizing a hashing trick for embedding lookup, our approach enables scalable and robust processing without maintaining an explicit vocabulary. The resulting embedding vectors are flattened and processed by the MLP to produce semantic vectors, which are clustered using a center loss strategy for unsupervised anomaly detection. Experimental results on public benchmark datasets demonstrate that our method achieves competitive accuracy with significantly improved computational efficiency compared to traditional attention-based models.
 
-        A crucial function during the process of training a model is called the loss function, which calculate the difference between the predicted values and the ground-truth values. The results of the loss function can significantly influence the effectiveness of the model's training because it simply decide the direction of the adjustment to the model. However, designing a loss function often requires the assistance of experts in the related field, leading to a resource-intensive design process. Recent research has proposed using Genetic Programming (GP) to generate loss functions to avoid the necessity of hiring numerous domain experts for assistance. Nevertheless, using GP typically results in decreased computational efficiency. This paper aims to improve the method of using GP to generate loss functions by modifying certain genetic operations and introducing the concept of tournament selection.
-
-        這邊要加結果
     \end{EnAbstractDescription}
 
 \end{EnAbstract}
