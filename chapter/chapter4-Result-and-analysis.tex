@@ -1,51 +1,35 @@
 \begin{ZhChapter}
 
     \chapter{Implementation}
-    \section{Experimental Setup}
     The experimental implementation of this study was conducted on the Windows 11 operating system. Visual Studio Code (VS Code) was utilized as the primary development environment, integrated with the Anaconda distribution for Python to manage package dependencies and virtual environments. A range of scientific computing and machine learning packages were installed to facilitate algorithm development, model training, and evaluation workflows. Detailed configuration steps and setup instructions are described in the following subsection.
 
-    \subsection{Hardware Requirements}
+    \section{Hardware Requirements}
 
     Table \ref{table:hardware} provides detailed specifications and purposes of each hardware component utilized in our experimental environment.
 
-    \begin{table}[htbp]
+    \begin{table*}[htbp]
         \centering
-        \caption{Hardware Requirements}
-        \label{table:hardware}
-        \begin{tabular}{|l|l|}
-            \hline
-            \textbf{Component} & \textbf{Specification}                            \\ \hline
-            CPU                & 12th Gen Intel(R) Core(TM) i5-12500H @ 2.50 GHz   \\ \hline
-            RAM                & 16.0 GB (15.6 GB usable)                          \\ \hline
-            Storage            & Built-in SSD (operating system and model storage) \\ \hline
-        \end{tabular}
-    \end{table}
+        \caption{Hardware Requirements} \label{table:hardware}
+        \makebox[\linewidth][c]{
+            \renewcommand\arraystretch{1.2}{
+                \begin{tabular}{| l | l |}
+                    \hline
+                    Component & Specification                                              \\
+                    \hline
+                    CPU       & 12th Gen Intel(R) Core(TM) i5-12500H @ 2.50 GHz            \\
+                    RAM       & 16.0 GB (15.6 GB usable)                                   \\
+                    Storage   & Built-in SSD (used for operating system and model storage) \\
+                    \hline
+                \end{tabular}
+            }
+        }
+    \end{table*}
+
 
     \subsection{Software Requirements}
-
-    Table \ref{tab:software} lists the software used in our experimental setup, along with their purposes and license types.
-
-    \begin{table}[htbp]
-        \centering
-        \caption{Software and Libraries Used in the Experiment}
-        \label{tab:software}
-        \begin{tabular}{|l|c|p{7cm}|c|}
-            \hline
-            \textbf{Software}                & \textbf{Version} & \textbf{Purpose}                                                                                                                                                 & \textbf{License} \\ \hline
-            Visual Studio Code~\cite{vscode} & 1.89.1           & A lightweight and extensible code editor used as the primary integrated development environment (IDE) for editing Python scripts and managing project structure. & MIT              \\ \hline
-            Anaconda Prompt~\cite{anaconda}  & 2024.02          & A command-line interface provided by the Anaconda distribution, used for managing Python virtual environments and installing dependencies via Conda or pip.      & BSD              \\ \hline
-            Python~\cite{python}             & 3.9.18           & The main programming language used to implement the core modules of the proposed system, including preprocessing, model training, and evaluation routines.       & Python License   \\ \hline
-            NumPy~\cite{numpy}               & 1.26.4           & Provides high-performance array structures and functions for numerical computing, especially efficient vector and matrix operations.                             & BSD              \\ \hline
-            Pandas~\cite{pandas}             & 2.2.2            & Offers powerful data manipulation and analysis tools, including DataFrame structures used for preprocessing and filtering packet data.                           & BSD              \\ \hline
-            Scikit-learn~\cite{scikit-learn} & 1.4.2            & Provides a wide range of machine learning algorithms, particularly the Multi-Layer Perceptron (MLP) classifier used in this study.                               & BSD              \\ \hline
-            mmh3~\cite{mmh3}                 & 4.0.1            & Implements MurmurHash3, a fast non-cryptographic hashing function used to convert tokens into integer values for embedding.                                      & MIT              \\ \hline
-            PyTorch~\cite{torch}             & 2.2.2+cpu        & A deep learning framework used to define and train neural networks, including custom embedding and classification models.                                        & BSD              \\ \hline
-        \end{tabular}
-    \end{table}
+    在這個章節主要介紹軟體安裝的過程，以下分成幾個步驟，Table \ref{tab:software} lists the software used in our experimental setup, along with their purposes and license types.
 
 
-
-    \subsubsection{Environment Setup}
 
     \textbf{Step 1: Installing Anaconda}
 
@@ -94,8 +78,6 @@
         \label{fig: VS}
     \end{figure*}
 
-    \subsubsection{Creating Virtual Environment and Installing Packages}
-
     \textbf{Step 3: Creating a Python Virtual Environment}
 
     Use the Anaconda Prompt to create a virtual environment with the designated Python version:
@@ -113,11 +95,35 @@
     A brief description of each package is provided in Table~\ref{tab:software}.
 
 
+
+    \begin{table*}[htbp]
+        \centering
+        \caption{Software and Libraries Used in the Experiment} \label{tab:software}
+        \makebox[\linewidth][c]{
+            \renewcommand\arraystretch{1.2}{
+                \begin{tabular}{| l | c | p{8cm} | c |}
+                    \hline
+                    Software/Library                 & Version   & Purpose                                                                                                                                                          & License        \\
+                    \hline
+                    Visual Studio Code~\cite{vscode} & 1.89.1    & A lightweight and extensible code editor used as the primary integrated development environment (IDE) for editing Python scripts and managing project structure. & MIT            \\
+                    Anaconda Prompt~\cite{anaconda}  & 2024.02   & A command-line interface provided by the Anaconda distribution, used for managing Python virtual environments and installing dependencies via Conda or pip.      & BSD            \\
+                    Python~\cite{python}             & 3.9.18    & The main programming language used to implement the core modules of the proposed system, including preprocessing, model training, and evaluation routines.       & Python License \\
+                    NumPy~\cite{numpy}               & 1.26.4    & Provides high-performance array structures and functions for numerical computing, especially efficient vector and matrix operations.                             & BSD            \\
+                    Pandas~\cite{pandas}             & 2.2.2     & Offers powerful data manipulation and analysis tools, including DataFrame structures used for preprocessing and filtering packet data.                           & BSD            \\
+                    Scikit-learn~\cite{scikit-learn} & 1.4.2     & Provides a wide range of machine learning algorithms, particularly the Multi-Layer Perceptron (MLP) classifier used in this study.                               & BSD            \\
+                    mmh3~\cite{mmh3}                 & 4.0.1     & Implements MurmurHash3, a fast non-cryptographic hashing function used to convert tokens into integer values for embedding.                                      & MIT            \\
+                    PyTorch~\cite{torch}             & 2.2.2+cpu & A deep learning framework used to define and train neural networks, including custom embedding and classification models.                                        & BSD            \\
+                    \hline
+                \end{tabular}
+            }
+        }
+    \end{table*}
+
     \textbf{Step 5: Selecting the VS Code Interpreter}
 
     In Visual Studio Code, press \texttt{Ctrl+Shift+P} to open the command palette, then select \textit{"Python: Select Interpreter"}. Choose the previously created \texttt{nids\_env} virtual environment from the list of available interpreters.
 
-    \subsubsection{4.1.4 Verifying the Installation}
+    \subsection{Verifying the Installation}
 
     To verify the installation, create a file named \texttt{main.py} and include the following test code:
     \begin{verbatim}
@@ -133,9 +139,21 @@
     python main.py
     \end{verbatim}
 
+
+
+    \subsection*{4.1.3 Dataset Description}
+
+    本研究使用公開可得的 \textbf{CICIoT2023}的資料集進行實驗。該資料集包含各種 IoT 網路設備之正常與異常流量封包，經由 Wireshark 擷取並轉換為 \texttt{.csv} 格式。本研究中我們選取包含 \textbf{Destination Port}、\textbf{Protocol Type} 與 \textbf{Source IP} 三個欄位作為主要輸入特徵，並進行 token 化與嵌入處理。
+
+    其中，訓練資料包含 $N=15,000$ 筆正常封包樣本，測試資料包含 $M=5,000$ 筆異常樣本與 $3,000$ 筆正常樣本，混合後進行無監督異常偵測評估。
+
+
+
     If the message is displayed successfully, it indicates that the environment has been set up correctly.
 
+    我們在實驗中觀察正常封包之 Mahalanobis 距離分佈，並選取距離分布的第 95 百分位作為異常判定門檻 $\tau$，此策略來自統計假設下的「5% 額外樣本為潛在異常點」。
 
+    此外，我們使用交叉驗證方式，將訓練資料切分為數個區段（$k=5$），於每次訓練後重新計算正常樣本之中心與距離分佈，並以每一折的最佳 F1-score 作為依據確定最適 percentile threshold（介於 93%～96% 之間），最終固定選用 95% 為平衡點。
 
 
 
