@@ -12,20 +12,14 @@ S2GE-NiDS is presented as Figure \ref{fig: Architecture} including preprocess mo
     \label{fig: Architecture}
 \end{figure*}
 
-During the preprocessing stage, relevant features are first extracted from network data packets and transformed into a combination of textual and numerical tokens. To prevent duplication and ensure a more uniform distribution within the embedding space, the model applies the non-encrypted MurmurHash3 function to encode each token.
-
-To further mitigate the risk of hash collisions, a modulo operation is performed on the resulting hash values, which are then used to index into the embedding table. This strategy reduces the likelihood of different tokens being mapped to the same location, thereby enhancing both the accuracy and efficiency of the embedding process.
-
-Next, the individual embedding vectors corresponding to each feature are concatenated into a single one-dimensional vector. This flattened vector is fed into a multi-layer perceptron (MLP) model, which transforms it into a compact semantic representation.
-
-Finally, in the Mahalanobis distance evaluation phase, the semantic vector is compared to a predefined center point in the learned semantic space. If the computed distance exceeds a specified threshold, the sample is flagged as an anomaly. Evaluation metrics such as the F1 score are then used to quantify detection performance.
+The further description will begin in the section 3.1.1.
 
 \subsection{Preprocess Model}
 In the preprocessing phase, we will do the following process as data file selection and filtering, feature extraction, and tokenization. These steps are designed to transform raw network traffic into structured representations suitable for semantic embedding and anomaly detection.
 
-\subsubsection{Classify Data Packet}
+\subsubsection{Classify and Clean Data}
 
-The first step in the preprocessing pipeline involves selecting and filtering the data files to ensure suitability for subsequent analysis. In this study, network traffic is collected and stored in the Comma-Separated Values (CSV) format—a widely adopted and flexible tabular data structure. CSV files are particularly well-suited for structured data representation due to their ease of parsing, compact storage, and seamless integration with mainstream data analysis libraries such as pandas and NumPy in Python.During this stage, only those CSV files containing the required packet-level features are retained, while incomplete, irrelevant, or malformed files are systematically excluded.
+The first step in the preprocessing pipeline involves selecting and filtering the data files to ensure suitability for subsequent analysis. In this study, network traffic is collected and stored in the Comma-Separated Values (CSV) format—a widely adopted and flexible tabular data structure. CSV files are particularly well-suited for structured data representation due to their ease of parsing, compact storage, and seamless integration with mainstream data analysis libraries such as pandas and NumPy in Python. During this stage, only those CSV files containing the required packet-level features are retained, while incomplete, irrelevant, or malformed files are systematically excluded. After data format selection, the raw data is merged into a unified DataFrame and subjected to a series of cleaning procedures. At First, all column names are normalized by removing extraneous whitespace and converting naming conventions where necessary to ensure consistency across feature dimensions. Next, Column values containing missing or undefined values are removed to prevent bias in downstream training. Finally, cloumns contain only zeros will be removed.  During this stage, the resulting dataset serves as the foundation for the subsequent tokenization and embedding stages.
 
 \subsubsection{Packet Semantic Extraction}
 
@@ -39,7 +33,7 @@ In practical implementation, we employ Python-based tools to load each \texttt{.
 \subsubsection{Tokenization ID}
 After the relevant features have been extracted, the next step is to perform tokenization, which converts structured data into a format suitable for semantic embedding. Each data entry consists of multiple fields—such as \texttt{Destination Port}, \texttt{Protocol}, and \texttt{SrcIP}—that represent different aspects of network behavior.
 
-Tokenization is achieved by concatenating each field name with its corresponding value to form a unique string representation. This composite token serves as the semantic unit used in downstream embedding processes. For example, tokens follow the format \textit{"field name + field value"}, as illustrated in Table~\ref{tab:token_example}.
+Tokenization is achieved by concatenating each field name with its corresponding value to form a unique string representation. If we use Table 3.1 as our example then the token ID is : Header Length 54、Flow Duration : 0.32817  and Protocol Type is TCP. This composite token serves as the semantic unit used in downstream embedding processes. For example, tokens follow the format \textit{"field name + field value"}, as illustrated in Table~\ref{tab:token_example}.
 
 
 \begin{table*}[htbp]
@@ -134,95 +128,13 @@ This two-dimensional indexing scheme ensures that each field-value pair is assig
 
 
 
-\subsubsection{Flatten}
-Flatten will string the tokenized data into a single vector through the vectors after the embedding column. For example, Header Length 54 is [-0.982, -0.301, -0.555,  2.061,  0.045, -0.618, -0.786,  0.573] and Protocol TCP tokeniz to [0.120,  1.202, -0.337, -0.982,  0.847,  0.110,  0.305, -0.499] ,Flow Duration 0.32817 [-0.024,  0.494,  0.754, -0.780, -1.002,  0.069, -0.520, -1.336], then the final flatten will be [-0.982, -0.301, -0.555, 2.061, 0.045, -0.618, -0.786, 0.573, -0.024, 0.494, 0.754, -0.78, -1.002, 0.069, -0.52, -1.336, -1.042, -0.116, 0.542, -0.987, 1.001, 0.086, 0.699, -0.903]
+\subsubsection{Flatten to One Class Vector}
+Flatten will string the tokenized data into a single vector through the vectors after the embedding column. For example, Header Length 54 is [-0.982, -0.301, -0.555,  2.061,  0.045, -0.618, -0.786,  0.573], Flow Duration 0.32817 is [-0.024,  0.494,  0.754, -0.780, -1.002,  0.069, -0.520, -1.336] and Protocol TCP tokeniz is [0.120,  1.202, -0.337, -0.982,  0.847,  0.110,  0.305, -0.499], then the final flatten will be [-0.982, -0.301, -0.555, 2.061, 0.045, -0.618, -0.786, 0.573, -0.024, 0.494, 0.754, -0.78, -1.002, 0.069, -0.52, -1.336, -1.042, -0.116, 0.542, -0.987, 1.001, 0.086, 0.699, -0.903]
 
 
-\subsubsection{MLP}
-\section{Related Work: Multi-Layer Perceptron in IoT Anomaly Detection}
+\subsubsection{MLP to Vector}
 
-The Multi-Layer Perceptron (MLP) is one of the foundational deep learning architectures, widely used in classification and anomaly detection tasks due to its simplicity and capability to model non-linear decision boundaries. In the context of IoT network traffic analysis, MLP has been adopted as a lightweight yet powerful model for detecting abnormal behaviors across various device and protocol types.
 
-\citet{shone2018deep} introduced a hybrid deep learning approach combining a stacked autoencoder with an MLP classifier to detect network intrusions. Their model was evaluated on the NSL-KDD dataset, achieving an accuracy of 85.42\% and demonstrating superior performance over classical ML algorithms such as decision trees and SVM.
-
-Similarly, \citet{rahman2020deep} applied a pure MLP-based architecture for anomaly detection in the BoT-IoT dataset. The network consisted of three hidden layers with ReLU activation and dropout regularization. The results showed that MLP achieved over 98.5\% detection accuracy and maintained a false positive rate below 1\%, outperforming traditional algorithms such as KNN and Naive Bayes.
-
-\citet{javaid2016deep} further explored MLP in a deep learning pipeline tailored for IoT environments. They emphasized the importance of feature normalization and used a softmax output layer for multi-class classification. Their experiments on KDDCup'99 and UNSW-NB15 datasets revealed that MLP models trained on optimized features could achieve both high recall and precision in detecting diverse attack types, including DoS, probing, and user-to-root exploits.
-
-Despite its effectiveness, MLP has certain limitations. It lacks spatial or temporal awareness, making it less suitable for sequential data unless combined with other architectures (e.g., LSTM or CNN). However, for static, tabular representations of network flows, MLP remains a competitive choice due to its fast inference and low memory footprint, which are critical in real-time IoT security deployments.
-
-These findings suggest that MLP can serve as a strong baseline model in IoT anomaly detection pipelines, especially when combined with proper feature engineering and regularization techniques.
-
-Given an input vector $\mathbf{x} \in \mathbb{R}^d$, the computation through an MLP with $L$ hidden layers can be described as:
-
-\begin{equation}
-    \mathbf{h}^{(1)} = \sigma\left( \mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)} \right)
-    \label{eq:mlp_layer1}
-\end{equation}
-
-\begin{equation}
-    \mathbf{h}^{(l)} = \sigma\left( \mathbf{W}^{(l)} \mathbf{h}^{(l-1)} + \mathbf{b}^{(l)} \right), \quad \text{for } l=2, \dots, L
-    \label{eq:mlp_hidden}
-\end{equation}
-
-\begin{equation}
-    \hat{\mathbf{y}} = f\left( \mathbf{W}^{(L+1)} \mathbf{h}^{(L)} + \mathbf{b}^{(L+1)} \right)
-    \label{eq:mlp_output}
-\end{equation}
-
-Where:
-\begin{itemize}
-    \item $\mathbf{W}^{(l)}$ and $\mathbf{b}^{(l)}$ are the weight matrix and bias vector of layer $l$
-    \item $\sigma(\cdot)$ is a non-linear activation function (e.g., ReLU)
-    \item $f(\cdot)$ is the output activation function (e.g., sigmoid or softmax)
-    \item $\hat{\mathbf{y}}$ is the predicted output vector
-\end{itemize}
-
-\subsection{Activation Functions}
-
-Common activation functions include:
-
-\begin{itemize}
-    \item \textbf{ReLU:} $\sigma(z) = \max(0, z)$
-    \item \textbf{Sigmoid:} $\sigma(z) = \frac{1}{1 + e^{-z}}$
-    \item \textbf{Tanh:} $\sigma(z) = \tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$
-\end{itemize}
-
-\subsection{Loss Functions}
-
-For binary classification, the binary cross-entropy loss is used:
-
-\begin{equation}
-    \mathcal{L}_{\text{binary}} = - \frac{1}{N} \sum_{i=1}^{N} \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]
-    \label{eq:binary_loss}
-\end{equation}
-
-For multi-class classification with $C$ classes, the categorical cross-entropy is used:
-
-\begin{equation}
-    \mathcal{L}_{\text{categorical}} = - \frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})
-    \label{eq:categorical_loss}
-\end{equation}
-
-\subsection{Backpropagation and Gradient Computation}
-
-Training is performed via gradient-based optimization (e.g., SGD, Adam), using backpropagation to compute gradients.
-
-Gradient of loss with respect to weights in layer $l$:
-
-\begin{equation}
-    \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}} = \delta^{(l)} \cdot \left( \mathbf{h}^{(l-1)} \right)^\top
-    \label{eq:gradient_weight}
-\end{equation}
-
-Recursive definition of error term:
-
-\begin{equation}
-    \delta^{(l)} = \left( \mathbf{W}^{(l+1)\top} \delta^{(l+1)} \right) \circ \sigma'\left( \mathbf{z}^{(l)} \right)
-    \label{eq:delta_recursive}
-\end{equation}
-
-Where $\circ$ denotes element-wise multiplication, and $\sigma'(\cdot)$ is the derivative of the activation function.
 
 
 \subsection{Mahalanobis Distance Model}
