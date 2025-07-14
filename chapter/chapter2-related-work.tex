@@ -1,64 +1,54 @@
 \begin{ZhChapter}
     \chapter{Related Work}
-    This section will introduce the relevant basic knowledge, including existing the IoT network intrusion detection methods, Tokenization, Hash Embedding, and language tags. 還在修改，可先跳過。
+    This section will introduce the relevant basic knowledge, including the existing the IoT network intrusion detection methods, Tokenization, Hash Embedding, and Multi-Layer Perceptron,Semantic Vector and Mahanobis Distance.
 
     \section{Network Intrusion Detection System in IoT}
-    In recent years, the proliferation of Internet of Things (IoT) devices has led to an increased focus on developing effective network intrusion detection systems (NIDS) tailored to the specific characteristics of IoT environments. Various approaches have been proposed to address the challenges associated with high-volume, heterogeneous network traffic, constrained device capabilities, and evolving attack patterns. Kharoubi et al.~\cite{kharoubi2025nidscnn} proposed NIDS-DL-CNN, a convolutional neural network (CNN)-based detection system designed for IoT security. By applying CNN layers to extract spatial features from traffic data, the model achieved high classification performance on datasets such as CICIoT2023 and CICIoMT2024. The authors demonstrated that their method achieved excellent precision and recall in both binary and multi-class scenarios. However, a notable limitation of the CNN-based approach lies in its inability to fully capture temporal dependencies across packet sequences, and its reliance on supervised learning requires extensive labeled datasets. Ashraf et al.~\cite{ashraf2025inids} introduced a real-time intrusion detection system (NIDS) based on traditional machine learning classifiers applied to the BoT-IoT dataset. The study compared seven algorithms, including Random Forest, Artificial Neural Networks (ANN) et al., and Support Vector Machines. Their results showed that Random Forest and ANN achieved the highest accuracy and robustness among all tested classifiers. Despite its efficiency, the NIDS system was highly dependent on manual feature engineering and lacked adaptability to novel threats, which are critical in fast-evolving IoT environments. Elrawy et al.~\cite{elrawy2018survey} conducted a comprehensive survey of intrusion detection methodologies in IoT-based smart environments, categorizing techniques according to architectural design (centralized vs. distributed), detection strategy (signature-based, anomaly-based, or hybrid), and system layer (perception, network, application). While the survey provided valuable insights and synthesized a broad range of IDS approaches, it lacked implementation evidence and empirical comparisons, limiting its utility for practical system design. Collectively, these studies highlight the trade-offs between detection performance, computational cost, and deployment feasibility. Deep learning models offer strong accuracy but demand computational resources, while traditional classifiers provide efficiency but often lack flexibility.
+    In recent years, the proliferation of Internet of Things (IoT) devices has led to an increased focus on developing effective network intrusion detection systems (NIDS) tailored to the specific characteristics of IoT environments. Various approaches have been proposed to address the challenges associated with high-volume, heterogeneous network traffic, constrained device capabilities, and evolving attack patterns.
 
+    For example, Kharoubi et al.~\cite{kharoubi2025nidscnn} proposed a convolutional neural network (CNN)-based detection system designed for IoT security. By applying CNN layers to extract spatial features from traffic data, the model achieved high classification performance on datasets such as CICIoT2023~\cite{ciciot2023} and CICIoMT2024~\cite{ciciot2024}. The authors demonstrated that their method achieved excellent precision and recall in both binary and multi-class scenarios. However, a notable limitation of the CNN-based approach lies in its inability to fully capture temporal dependencies across packet sequences, and its reliance on supervised learning requires extensive labeled datasets.
 
-    Table 2.1 summarize the eight characteristics commonly used by academia and industry are summarized below.
+    Ashraf et al.~\cite{ashraf2025inids} introduced a Internet of Things Network Intrusion Detection System (INIDS) based on traditional machine learning classifiers applied to the BoT-IoT dataset. The study compared seven algorithms, including Random Forest, Artificial Neural Networks (ANN), and Support Vector Machines etc. Their results showed that Random Forest and ANN achieved the highest accuracy and robustness among all tested classifiers. Despite its efficiency, the NIDS system was highly dependent on manual feature engineering and lacked adaptability to novel threats, which are critical in fast-evolving IoT environments.
 
-    First, the "target port" is one of the most direct attack indicators. IoT devices usually open a few ports for normal communication. If a large number of connections are initiated to common ports such as 22 (SSH), 23 (Telnet), 80 (HTTP), 443 (HTTPS) in a short period of time, it is very likely a precursor to malicious port scanning, brute force cracking or service denial of service attacks\cite{sicari2015}.
+    Lee et al.~\cite{lee2000framework} proposed a method for extracting features from network traffic to build models that can effectively detect intrusions. They thus demonstrated that feature selection has a critical impact on the accuracy and efficiency of NIDS, especially when dealing with large datasets or new types of attacks.
 
-    Next, Packet Size and Flow Bytes per Second reflect the abnormal pattern of data flow. Oversized packets may contain malicious payloads, while undersized packets may be detection messages for reconnaissance; and drastically fluctuating packet numbers or byte frequencies are common in flood attacks or covert data leakage behaviors\cite{moustafa2015}.
+    Thaseen et al.~\cite{thaseen2017intrusion} proposed a method combining feature selection with multi-class Support Vector Machine(SVM) to improve the accuracy of NIDS. They demonstrated that a good feature selection strategy can effectively reduce detection errors and improve classification efficiency.
 
-    Number of Connections is used to observe source diversity. A large number of IP connections with different destinations initiated from a single source in a very short period of time often means that the scanning tool is probing the network segment; on the contrary, if a large number of new and never-before-seen IPs appear, it may be caused by a distributed denial of service (DDoS) attack or IP spoofing\cite{sicari2015}.
+    Table 2.1 provides a consolidated overview of eight widely adopted features commonly utilized in anomaly detection across both academic research and industrial applications.
 
-    Flow Duration is also critical. Scanning tools often use very short connections to detect various services; and if there is a long continuous connection, it means that the attacker is performing a long-term data exfiltration or maintaining communication with the control server (C\&C) to instigate deeper penetration\cite{moustafa2015}.
-
-    Protocol Type and TCP Flags help to further interpret the behavior pattern. IoT devices generally operate mainly based on TCP/UDP. If a large number of ICMP (such as ping) or other rare protocols appear, it means that the attacker may be exploiting protocol weaknesses or trying to circumvent security protection. In addition, abnormal flag combinations such as the simultaneous appearance of SYN and FIN, or a large number of RST packets in a short period of time, are typical features of stealth scanning or specific TCP attacks\cite{moustafa2015}.
-
-    Finally, "Packet Length" can reflect more subtle anomalies: when a device repeatedly sends packets of a fixed length that are too long or too short, it is very likely that the attacker has implanted malicious data in it, or is performing a forgery and spreading attack.
-
-    Combining the above eight features, the security system can detect and intercept various IoT attack behaviors at the earliest stage, providing a solid basis for the construction of subsequent intrusion detection models.
 
     \begin{table*}[htbp]
         \centering
         \caption{Common Anomalous Features in IoT Network Traffic and Their Descriptions}
         \label{tab:iot_abnormal_features}
+        \vspace{0.5em}
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.3}{
                 \begin{tabular}{| l | p{10cm} |}
                     \hline
-                    \textbf{Feature}                                        & \textbf{Description}                                                            \\
+                    \textbf{Feature}                                       & \textbf{Description}                                                                                                      \\
                     \hline
-                    Destination Port\cite{tang2016deep}                     &
-                    Specific port targets (e.g., 22, 23, 80, 443) are often associated with attacks.
-                    Abnormal access to these ports may suggest behaviors such as scanning, DDoS, or brute-force intrusion.                                    \\
+                    Destination Port \cite{tang2016deep}                   &
+                    The port number in a network packet received by the destination host, used to identify the communication entry point of an application or service.                                 \\
                     \hline
-                    Flow Duration\cite{tharewal2022intrusion}               &
-                    Extremely short or long connection durations within brief timeframes may signal scanning activity or data exfiltration.                   \\
+                    Protocol Type \cite{tharewal2022intrusion}             &
+                    Used to indicate the type of communication protocol used by the packet, such as TCP, UDP, ICMP, etc.                                                                               \\
                     \hline
-                    Total Forward Packets\cite{sharafaldin2018cicflowmeter} &
-                    Unusually high or low packet counts in one direction may indicate abnormal sessions or flooding behavior.                                 \\
+                    Duration / flow\_duration \cite{tharewal2022intrusion} & The length of time a network connection session lasts, the number of seconds from the start to the end of the connection. \\
                     \hline
-                    Packet Length\cite{tang2016deep}                        &
-                    Anomalies in packet size—whether fixed, too long, or too short—often reflect malicious traffic like botnet propagation or worms.          \\
+                    Packet Length \cite{tang2016deep}                      &
+                    The size of a packet is usually measured in bytes and refers to the amount of data in a single packet.                                                                             \\
                     \hline
-                    Protocol Type\cite{tharewal2022intrusion}               &
-                    Sudden increases in uncommon protocols (e.g., ICMP, UDP) may reveal attempts to exploit protocol vulnerabilities or bypass filters.       \\
+                    Source IP / Destination IP \cite{tavallaee2009kdd}     &
+                    The source and destination IP addresses of a packet indicate the network locations of the sender and receiver, respectively.                                                       \\
                     \hline
-                    Source IP / Destination IP\cite{tavallaee2009kdd}       &
-                    Repeated access from abnormal IP addresses, or sudden surges in novel IP sources, are indicative of scanning, spoofing, or DDoS activity. \\
+                    Flow Bytes per Second \cite{tang2016deep}              &
+                    The total data flow through the network connection per unit time, measured in bytes per second (Bytes/s).                                                                          \\
                     \hline
-                    Flow Bytes per Second\cite{tang2016deep}                &
-                    Sharp fluctuations—surges or drops—in flow byte rate may suggest DoS attacks or unauthorized data transfer.                               \\
+                    TCP Flags \cite{sharafaldin2018cicflowmeter}           &
+                    The control bit flag in the TCP packet indicates the status of the packet or the control message, such as SYN for connection request and FIN for connection termination.           \\
                     \hline
-                    TCP Flags\cite{sharafaldin2018cicflowmeter}             &
-                    Unusual combinations (e.g., SYN, FIN, RST) can indicate stealth scans or TCP-based flooding.                                              \\
-                    \hline
-                    Number of Connections\cite{tang2016deep}                &
-                    A large number of new connections established by a single IP in a short time often reflects worm propagation or botnet coordination.      \\
+                    Number of Connections \cite{tang2016deep}              &
+                    The number of network connections established by a single source IP within a specified period of time, used to measure connection activity.                                        \\
                     \hline
                 \end{tabular}
             }
@@ -68,29 +58,32 @@
 
 
 
+    \section{Tokenization Technique in IoT Application}
+    %技術背景說明（Tokenization 的基本原理與應用場景）
+    Tokenization is the process of converting raw packet data or traffic feature fields into semantically meaningful token sequences, thereby enabling anomaly detection models to perform contextual understanding and analysis. This technique facilitates the modeling of complex patterns in network traffic by translating low-level features into high-level representations.
+
+    %代表性研究一（Flow2Vec 與文字式轉換）
+    Shapira et al.~\cite{shapira2021flow} proposed Flow2Vec, a framework that transforms network flow events into token sequences and applies contextual embeddings for analysis. This method is particularly effective for the classification and anomaly detection of encrypted traffic, as it captures the semantic relationships among protocols, IP addresses, and packet sizes.
+    Li, Wei et al.~\cite{li2020embedding} transformed URL paths and DNS queries in IoT traffic into text sequences. They performed n-gram segmentation, followed by TF-IDF or Word2Vec embedding, and combined these representations with SVM and RandomForest classifiers to detect malicious domains.
+
+    %LSTM 與輕量嵌入模型
+    Karim et al.~\cite{karim2019lstm} introduced a technique that tokenizes IoT network traffic features—such as protocols, port numbers, and flag bits—and processes them through an embedding layer followed by a Long Short-Term Memory (LSTM) network for semantic modeling. This approach demonstrated high classification accuracy and recall in identifying IoT malware samples.
+    Building on this idea, Muhammad et al.~\cite{muhammad2020efficient} proposed a lightweight method combining token embedding with a deep classification model. Their technique tokenizes and standardizes packet fields such as timestamps, lengths, and protocol names, yielding significant improvements in real-time classification performance and anomaly detection, especially in resource-constrained IoT environments.
+
+    %One-Hot + Embedding
+    Javaid et al. \cite{javaid2016deep} employed both One-Hot encoding and word embedding for categorical features, such as protocol types and flag statuses, in IoT networks. These representations were input into deep neural networks to detect abnormal traffic. Experimental results demonstrated that embedding semantic information not only improves detection accuracy but also enhances generalization while reducing feature dimensionality.
+
+    Collectively, these studies confirm that tokenization strategies are highly effective in the context of IoT anomaly detection. By transforming heterogeneous traffic attributes into unified embedding vectors, such approaches enable models to learn and infer behavioral patterns across both packet-level and application-level traffic. This has significant implications for the scalability and accuracy of intrusion detection systems deployed in diverse and dynamic IoT environments.
 
 
 
-    \section{Tokenization}
-    \noindent Recent advances in IoT network security have explored various lightweight feature representations to enable efficient anomaly detection on constrained devices. One promising direction is the use of \textbf{token-based features}, which tokenize sequences from network traffic—such as packet headers, payloads, or session patterns—and analyze them using statistical or learning-based approaches.
-
-
-    \noindent In 2018, Yair Meidan, Michael Bohadana, Yael Mathov, Yisroel Mirsky, Dominik Breitenbacher, Asaf Shabtai, Yuval Elovici et al. published a paper \emph{“N-BaIoT: Network-based Detection of IoT Botnet Attacks Using Deep Autoencoders”} in IEEE Pervasive Computing, proposing an anomaly detection system based on deep autoencoders. They divided the network traffic of different IoT devices into feature vectors of fixed length and tokenized them based on frequency and count to learn the latent representation of normal behavior, achieving a detection accuracy of 99.8% and a false alarm rate of less than 0.5% on multiple sets of devices (such as Baby Monitor and Thermostat). \cite{meidan2018n}
-
-
-    \noindent Next, in 2020, A. H. M. Rahman, B. K. Roy, and C. Li, in their paper
-    \emph{“Token Sequence Modeling for Anomaly Detection in IoT Network Traffic”}, treated URL paths and DNS queries as text sequences, used n-gram segmentation and then TF-IDF vectorization, and classified them using Random Forest and Support Vector Machine (SVM), achieving an F1 score of over 96\% in the malicious domain name detection task. \cite{rahman2020token}
-
-
-    \noindent In addition, Miguel Torres, Isabel Rojas, and Carlos Martinez published a paper in 2022,
-    \emph{“IoT-BERT: Pretraining Transformers for IoT Network Packet Sequences”}, which introduced a Transformer model called IoT-BERT, which uses self-supervised learning to pre-train on tokenized packet headers and payloads, learns context-aware network behavior embeddings, and achieves over 98\% accuracy in anomaly classification and attack attribution tasks on the TON\_IoT dataset. \cite{torres2022iotbert}
-    Table 2.2 還沒補說明
-
+    Table 2.2 shows the comparison of some features in anomaly detection using Tokenization. For example, Protocol = TCP only retains the field name and value, and directly discards other symbols and spaces.
 
     \begin{table*}[htbp]
         \centering
         \caption{Examples of Field-Value Tokenization in IoT Network Traffic}
         \label{tab:tokenization_examples}
+        \vspace{0.5em}
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.2}{
                 \begin{tabular}{| l | p{10cm} |}
@@ -99,21 +92,17 @@
                     \hline
                     Protocol = TCP            & Protocol:TCP                      \\
                     \hline
-                    Destination Port = 443    & DstPort:443                       \\
+                    Destination Port = 80     & DstPort:80                        \\
                     \hline
-                    Source Port = 80          & SrcPort:80                        \\
+                    Flow Duration = 0.32817   & FlowDuration:0.32817              \\
                     \hline
                     Source IP = 192.168.0.1   & SrcIP:192.168.0.1                 \\
-                    \hline
-                    Flow Duration = 120000    & FlowDuration:120000               \\
                     \hline
                     Payload Bytes = 56        & PayloadBytes:56                   \\
                     \hline
                     Packet Count = 10         & PacketCount:10                    \\
                     \hline
                     Flag = ACK                & Flag:ACK                          \\
-                    \hline
-                    Protocol = ICMP           & Protocol:ICMP                     \\
                     \hline
                     Destination IP = 10.0.0.5 & DstIP:10.0.0.5                    \\
                     \hline
@@ -124,138 +113,86 @@
 
 
 
-    \section{Hash Embedding} \label{sec:hash_embedding}
-    To address the challenges of high-dimensional categorical or textual data in IoT traffic (e.g., URLs, IPs, headers), recent research has explored \textbf{hash embedding} as an efficient representation technique. Hash embedding reduces memory usage and overfitting by mapping high-cardinality tokens into fixed-size low-dimensional vectors using multiple hash functions.
+    \section{Hash Embedding in Anomaly Detection} \label{sec:hash_embedding}
+    Hash Embedding is a common lightweight feature encoding technology \cite{svenstrup2017hash}, which is particularly suitable for structured, high-dimensional, or large-number-of-categories network data. Its core approach is to convert each field name/field value (or a combination of the two) into a set of indexes through a hash function (such as MurmurHash3), and query the embedding table to obtain a fixed-length semantic vector.  Ashraf et al.
 
-    \cite{gupta2020hash} proposed a hash embedding-based method for representing protocol-level IoT traffic, especially targeting categorical fields such as destination ports, device types, and payload signatures. Their approach utilized a multi-hash embedding layer before feeding data into a shallow neural network for anomaly detection. Experiments on the BoT-IoT dataset showed a 40\% reduction in model size while retaining over 97\% detection accuracy compared to one-hot encoding.
+    As Gupta et al.~\cite{gupta2020hash} proposed a hash embedding-based method for representing protocol-level IoT traffic, especially targeting categorical fields such as destination ports, device types, and payload signatures. Their approach utilized a multi-hash embedding layer before feeding data into a shallow neural network for anomaly detection. Experiments on the IoT dataset showed a 40\% reduction in model size while retaining over 97\% detection accuracy compared to one-hot encoding.
 
-    \cite{feng2021lightweight} further integrated hash embeddings into a lightweight convolutional architecture for edge-based IoT security. Their model encoded domain names, user-agent strings, and API patterns using 2-way hash embeddings, which significantly reduced the input dimension and inference latency. They demonstrated that their system could run on resource-constrained devices (e.g., Raspberry Pi) with only 30ms per inference, while achieving an F1-score of 96.5\% on the CIC-ToN-IoT dataset.
-    In another study, \cite{yin2022efficient} applied hash embeddings to convert netflow token sequences into compressed, learnable embeddings used in attention-based anomaly detection models. Their work highlights the robustness of hash embeddings in minimizing collision effects and handling unseen tokens during inference, which is particularly important in dynamic IoT networks.
+    Feng et al. \cite{feng2021lightweight} had further integrated hash embeddings into a lightweight convolutional architecture for edge-based IoT security. Their model encoded domain names, user-agent strings, and API patterns using 2-way hash embeddings, which significantly reduced the input dimension and inference latency. They demonstrated that their system could run on resource-constrained devices (e.g., Raspberry Pi) with only 30ms per inference, while achieving an F1-score of 96.5\% on the CIC-ToN-IoT dataset.
+
+
     Overall, these studies confirm that hash embedding is a scalable and effective technique for representing sparse or categorical IoT traffic features, enabling fast and accurate detection of malicious behaviors under memory and computation constraints.
-    To efficiently represent high-cardinality categorical data or sparse tokenized sequences in IoT traffic, the \textbf{hashing trick} (also known as feature hashing) has become a widely used method in machine learning and anomaly detection tasks. Unlike one-hot encoding, which results in extremely high-dimensional and sparse vectors, the hash trick maps input features into a lower-dimensional fixed-size vector using one or more hash functions.
-
-    The basic idea is to apply a hash function $h(\cdot)$ to map each feature $x_i$ to an index in a fixed-size vector of length $d$. The value is then accumulated in the corresponding index, optionally with a sign function $g(\cdot)$ to preserve distribution balance. Formally, the transformation is defined as:
-
-    \begin{equation}
-        \mathbf{z}_j = \sum_{i: h(x_i) = j} g(x_i) \cdot v(x_i), \quad j = 1, 2, \dots, d
-    \end{equation}
-
-    where:
-    \begin{itemize}
-        \item $x_i$ is the $i$-th feature or token (e.g., a word, IP, URL fragment).
-        \item $v(x_i)$ is the associated value (e.g., frequency or 1 for binary presence).
-        \item $h(x_i) \in \{1, \dots, d\}$ is the hash function mapping to index $j$.
-        \item $g(x_i) \in \{-1, +1\}$ is a second hash function that determines the sign to reduce collisions (optional).
-        \item $\mathbf{z} \in \mathbb{R}^d$ is the final hash-embedded vector.
-    \end{itemize}
-
-    This approach has multiple benefits in the context of IoT:
-    \begin{itemize}
-        \item \textbf{Memory efficiency:} The output vector dimension $d$ is predefined, independent of vocabulary size.
-        \item \textbf{Collision tolerance:} While hash collisions may occur, in practice they have minimal effect when $d$ is sufficiently large.
-        \item \textbf{Online learning suitability:} Hash functions are fast and do not require a predefined dictionary, making them ideal for streaming IoT data.
-    \end{itemize}
-
-    Multiple-hash embedding schemes~\cite{hashingtrick} extend this idea by combining several independent hash functions and learnable embedding matrices to further mitigate collision effects and improve generalization.
 
 
-    \section{Multi-Layer Perceptron in Anomaly Detection} 在這裡說明技術，放圖
-    Multi-Layer Perceptrons (MLPs) have been widely applied in the field of anomaly detection due to their capability to model non-linear relationships between input features and hidden patterns. Unlike traditional statistical models that rely on predefined thresholds or assumptions about data distribution, MLPs are capable of learning complex, high-dimensional feature representations in a data-driven manner \cite{lecun2015deep}.
+
+
+    \section{Multi-Layer Perceptron in Anomaly Detection}
+    Multi-Layer Perceptrons (MLPs) have been widely applied in the field of anomaly detection due to their capability to model non-linear relationships between input features and hidden patterns. Unlike traditional statistical models that rely on predefined thresholds or assumptions about data distribution, MLPs are capable of learning complex, high-dimensional feature representations in a data-driven manner   \cite{lecun2015deep}.
 
     In recent years, MLP-based anomaly detection methods have been employed in various domains, including network security \cite{moustafa2019new}, industrial control systems \cite{kim2020cyber}, and IoT environments \cite{nguyen2020autoencoder}. These models typically consist of multiple fully connected layers with nonlinear activation functions, such as ReLU or sigmoid, enabling the learning of hierarchical semantic features. The outputs are used to distinguish between normal and abnormal behavior based on reconstruction error, classification scores, or learned distance metrics.
 
-    While MLPs are not as expressive as deep convolutional or recurrent models, their low computational cost and ease of deployment make them particularly attractive for lightweight and real-time anomaly detection systems. In our work, we leverage an MLP-based encoder to transform hash-embedded feature vectors into semantic representations, which are then evaluated using Mahalanobis distance for effective anomaly scoring.
 
-    The Multi-Layer Perceptron (MLP) is one of the foundational deep learning architectures, widely used in classification and anomaly detection tasks due to its simplicity and capability to model non-linear decision boundaries. In the context of IoT network traffic analysis, MLP has been adopted as a lightweight yet powerful model for detecting abnormal behaviors across various device and protocol types.
+    Moustafa et al. \cite{moustafa2019new} proposed a hybrid intrusion detection system that combines feature selection and deep learning, utilizing a Multilayer Perceptron (MLP) as the final classifier. Experimental results demonstrated that the hybrid approach significantly outperforms classical machine learning algorithms such as Decision Trees and Naive Bayes, achieving over 95\% detection accuracy and a low false positive rate, particularly excelling in identifying DoS and probe attacks.
 
-    \cite{shone2018deep} introduced a hybrid deep learning approach combining a stacked autoencoder with an MLP classifier to detect network intrusions. Their model was evaluated on the NSL-KDD dataset, achieving an accuracy of 85.42\% and demonstrating superior performance over classical ML algorithms such as decision trees and SVM.
 
-    Similarly, \cite{rahman2020deep} applied a pure MLP-based architecture for anomaly detection in the BoT-IoT dataset. The network consisted of three hidden layers with ReLU activation and dropout regularization. The results showed that MLP achieved over 98.5\% detection accuracy and maintained a false positive rate below 1\%, outperforming traditional algorithms such as KNN and Naive Bayes.
+    Nguyen et al. \cite{nguyen2020autoencoder} developed an anomaly detection method for IoT traffic using an autoencoder framework, with the decoder implemented as a Multilayer Perceptron. They focused on reducing communication overhead while maintaining detection accuracy, suitable for low-bandwidth IoT networks. The model takes raw traffic features (e.g., port numbers, packet sizes) and encodes them into a compact latent space before reconstructing them through a multi-layer MLP. Anomalies are identified based on high reconstruction error. Their experiments on the BoT-IoT dataset showed that the MLP-based decoder could detect attacks like DDoS and port scanning with an F1-score exceeding 98.5\%, while maintaining a false positive rate below 1\%, thus demonstrating the effectiveness of MLP in semantic compression and inference within constrained IoT devices.
 
-    \cite{javaid2016deep} further explored MLP in a deep learning pipeline tailored for IoT environments. They emphasized the importance of feature normalization and used a softmax output layer for multi-class classification. Their experiments on KDDCup'99 and UNSW-NB15 datasets revealed that MLP models trained on optimized features could achieve both high recall and precision in detecting diverse attack types, including DoS, probing, and user-to-root exploits.
 
-    Despite its effectiveness, MLP has certain limitations. It lacks spatial or temporal awareness, making it less suitable for sequential data unless combined with other architectures (e.g., LSTM or CNN). However, for static, tabular representations of network flows, MLP remains a competitive choice due to its fast inference and low memory footprint, which are critical in real-time IoT security deployments.
+    Nathan Shone et al. \cite{shone2018deep} introduced a hybrid deep learning approach combining a stacked autoencoder with an MLP classifier to detect network intrusions. Their model was evaluated on the NSL-KDD dataset, achieving an accuracy of 85.42\% and demonstrating superior performance over classical ML algorithms such as decision trees and SVM.
+
+    Similarly et al. \cite{rahman2020deep} applied a pure MLP-based architecture for anomaly detection in the BoT-IoT dataset. The network consisted of three hidden layers with ReLU activation and dropout regularization. The results showed that MLP achieved over 98.5\% detection accuracy and maintained a false positive rate below 1\%, outperforming traditional algorithms such as KNN and Naive Bayes.
+
+    Ahmad Javaid et al. \cite{javaid2016deep} further explored MLP in a deep learning pipeline tailored for IoT environments. They emphasized the importance of feature normalization and used a softmax output layer for multi-class classification. Their experiments on KDDCup'99 and UNSW-NB15 datasets revealed that MLP models trained on optimized features could achieve both high recall and precision in detecting diverse attack types, including DoS, probing, and user-to-root exploits.
+
+
+
+
 
     These findings suggest that MLP can serve as a strong baseline model in IoT anomaly detection pipelines, especially when combined with proper feature engineering and regularization techniques.
 
-    Given an input vector $\mathbf{x} \in \mathbb{R}^d$, the computation through an MLP with $L$ hidden layers can be described as:
-
-    \begin{equation}
-        \mathbf{h}^{(1)} = \sigma\left( \mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)} \right)
-        \label{eq:mlp_layer1}
-    \end{equation}
-
-    \begin{equation}
-        \mathbf{h}^{(l)} = \sigma\left( \mathbf{W}^{(l)} \mathbf{h}^{(l-1)} + \mathbf{b}^{(l)} \right), \quad \text{for } l=2, \dots, L
-        \label{eq:mlp_hidden}
-    \end{equation}
-
-    \begin{equation}
-        \hat{\mathbf{y}} = f\left( \mathbf{W}^{(L+1)} \mathbf{h}^{(L)} + \mathbf{b}^{(L+1)} \right)
-        \label{eq:mlp_output}
-    \end{equation}
-
-    Where:
-    \begin{itemize}
-        \item $\mathbf{W}^{(l)}$ and $\mathbf{b}^{(l)}$ are the weight matrix and bias vector of layer $l$
-        \item $\sigma(\cdot)$ is a non-linear activation function (e.g., ReLU)
-        \item $f(\cdot)$ is the output activation function (e.g., sigmoid or softmax)
-        \item $\hat{\mathbf{y}}$ is the predicted output vector
-    \end{itemize}
-
-    \subsection{Activation Functions}
-
-    Common activation functions include:
-
-    \begin{itemize}
-        \item \textbf{ReLU:} $\sigma(z) = \max(0, z)$
-        \item \textbf{Sigmoid:} $\sigma(z) = \frac{1}{1 + e^{-z}}$
-        \item \textbf{Tanh:} $\sigma(z) = \tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$
-    \end{itemize}
-
-    \subsection{Loss Functions}
-
-    For binary classification, the binary cross-entropy loss is used:
-
-    \begin{equation}
-        \mathcal{L}_{\text{binary}} = - \frac{1}{N} \sum_{i=1}^{N} \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]
-        \label{eq:binary_loss}
-    \end{equation}
-
-    For multi-class classification with $C$ classes, the categorical cross-entropy is used:
-
-    \begin{equation}
-        \mathcal{L}_{\text{categorical}} = - \frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})
-        \label{eq:categorical_loss}
-    \end{equation}
-
-    \subsection{Backpropagation and Gradient Computation}
-
-    Training is performed via gradient-based optimization (e.g., SGD, Adam), using backpropagation to compute gradients.
-
-    Gradient of loss with respect to weights in layer $l$:
-
-    \begin{equation}
-        \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}} = \delta^{(l)} \cdot \left( \mathbf{h}^{(l-1)} \right)^\top
-        \label{eq:gradient_weight}
-    \end{equation}
-
-    Recursive definition of error term:
-
-    \begin{equation}
-        \delta^{(l)} = \left( \mathbf{W}^{(l+1)\top} \delta^{(l+1)} \right) \circ \sigma'\left( \mathbf{z}^{(l)} \right)
-        \label{eq:delta_recursive}
-    \end{equation}
-
-    Where $\circ$ denotes element-wise multiplication, and $\sigma'(\cdot)$ is the derivative of the activation function.
 
 
-    \section{Semantic Vector}
+    \section{Semantic Vector in IoT Anomaly Detection}
     Semantic vector representations, originally popularized in natural language processing (NLP), have gained traction in anomaly detection tasks due to their ability to encode complex contextual information into fixed-length embeddings. In security-related applications, raw network traffic often contains heterogeneous features that lack explicit semantics; transforming these into semantic vectors enables better generalization and interpretability \cite{mikolov2013distributed}.
 
-    Recent works have applied semantic encoding strategies, such as Word2Vec and sequence embeddings, to convert protocol names, IP addresses, or header fields into high-dimensional vectors \cite{shapira2021flow,li2020embedding}. These semantic vectors capture latent relationships between fields and behaviors, allowing downstream models to detect subtle deviations from normal patterns. For instance, Shapira et al. \cite{shapira2021flow} proposed Flow2Vec, which encodes sequences of network events into dense vectors, improving anomaly detection in encrypted traffic.
 
-    Compared to one-hot encoding or manually crafted features, semantic vectors provide a richer and more scalable representation, particularly when combined with deep learning models. In this work, we construct semantic vectors from tokenized field-value pairs using a hash-based embedding scheme followed by an MLP encoder. This method ensures that semantic relationships among network features are preserved while maintaining computational efficiency.
+    Recent works have applied semantic encoding strategies, such as Word2Vec and sequence embeddings, to convert protocol names, IP addresses, or header fields into high-dimensional vectors \cite{li2020embedding}. These semantic vectors capture latent relationships between fields and behaviors, allowing downstream models to detect subtle deviations from normal patterns. For instance, Shapira et al. \cite{shapira2021flow} proposed Flow2Vec, which encodes sequences of network events into dense vectors, improving anomaly detection in encrypted traffic.
+
+
+    Torres et al.~\cite{torres2022iotbert} used a self-supervised Transformer model to learn semantic embeddings of packet sequences, tokenized each field and value and converted them into word embeddings, and finally achieved anomaly classification accuracy of over 98\% on the TON IoT dataset.
+
+
+    Rahman et al.~\cite{gokstorp2024anomaly} treated DNS/URL traffic as a text sequence, constructed semantic vectors using n-gram segmentation and TF-IDF, and then used SVM and Random Forest for classification, with an F1-score of over 96\% for detecting malicious domains.
+
+    Nguyen et al.~\cite{hariharan2023detecting} concatenated the structured fields of IoT packets through semantic embedding and entered the AutoEncoder model for reconstruction error analysis. The study pointed out that compared with pure numerical encoding, semantic vectors can effectively improve anomaly recall and precision.
+
+
+    \section{Mahanobis Distance in IoT Anomaly Detection}
+    Mahalanobis distance was first proposed by Indian statistician Prasanta Chandra Mahalanobis. It proposed a method to measure the "distance" between points and multidimensional statistical distributions, thus breaking through the limitation of Euclidean distance that cannot adjust scale and correlation.
+    Venturini et al. \cite{venturini2024smarthomes} explored the application of Mahalanobis distance in smart home behavior analysis, using multidimensional time series to capture abnormal device usage scenarios. Experiments show that when Mahalanobis distance exceeds the normal threshold, abnormal behaviors such as failures or unexpected operations can be detected. The proposed of following classic formula as below.
+
+
+    \begin{equation}
+        d_M(\mathbf{x}) = \sqrt{(\mathbf{x} - \boldsymbol{\mu})^T \, \boldsymbol{\Sigma}^{-1} \, (\mathbf{x} - \boldsymbol{\mu})}
+    \end{equation}
+
+    The equation $d_M(\mathbf{x})$ denotes the Mahalanobis distance, where $\mathbf{x}$ is the observation vector, $\boldsymbol{\mu}$ is the mean vector, and $\boldsymbol{\Sigma}$ is the covariance matrix of the distribution.
+
+
+
+
+    Another study examined the applicability of Mahalanobis Distance (MD) in detecting anomalies within IoT network traffic by integrating it with Principal Component Analysis (PCA) for dimensionality reduction \cite{icact2018md}. The proposed approach first projects high-dimensional network flow data onto a lower-dimensional subspace using PCA, preserving principal components that capture the most significant variance. Subsequently, the deviation score of each data instance is computed using Mahalanobis Distance relative to the center of normal traffic behavior.
+    The evaluation demonstrates that MD exhibits superior detection performance compared to traditional distance metrics such as Euclidean distance. %and Hotelling’s.
+
+    Tharewal et al. \cite{tharewal2022intrusion} proposed an intrusion detection method that combines Mahalanobis Distance and cluster analysis to analyze the network behavior patterns of IoT devices. They regarded the multi-dimensional features of packets as sample points, established a distribution model of normal behavior, and calculated the Mahalanobis distance between the test sample and the distribution center to identify anomalies. The research results show that this method can effectively improve the detection rate and low false positive rate.
+
+    Kwon et al. \cite{kwon2019lightweight} proposed an anomaly detection method based on Mahalanobis distance for IoT devices with limited resources. The method calculates the distance between the feature and the normal behavior distribution at the edge device to avoid cloud latency and data leakage risks. Experiments show that the method can quickly and accurately detect abnormal events in smart home and smart factory scenarios.
+
+
+
+
+
+
 
 
 

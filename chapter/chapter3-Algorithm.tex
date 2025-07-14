@@ -1,273 +1,359 @@
 \begin{ZhChapter}
 
-\chapter{Methodology}
-In this session, we will introduce the S2GE-NIDS (structured semantics and generation embedded network intrusion detection system) architecture and details its operational workflow, clearly delineating each step from semantic tokenization through anomaly detection and decision-making processes.
-\section{Architecture} %Chapter 3.1
-S2GE-NiDS is presented as Figure \ref{fig: Architecture} including preprocess model, embedding model, and Mahalanobis model.
+    \chapter{Methodology}
+    In this section, we will introduce the S2GE-NIDS (structured semantics and generation embedded network intrusion detection system) architecture and detail its operational workflow, clearly delineating each step from semantic tokenization through anomaly detection and decision-making processes.
+    \section{Architecture} %Chapter 3.1
+    The architecture of S2GE-NiDS is presented as Figure \ref{fig:Architecture}, including preprocess model, embedding model, and Mahalanobis model.
 
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width = 0.75\textwidth]{image/Flow.jpg}
-    \caption{Architecture of S2GE-NIDS}
-    \label{fig: Architecture}
-\end{figure*}
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.7\textwidth]{image/architecture.png}
+        \caption{Architecture of S2GE-NIDS}
+        \label{fig:Architecture}
+    \end{figure*}
 
-The further description will begin in the section 3.1.1.
+    The further description will begin in the section 3.1.1.
 
-\subsection{Preprocess Model}
-In the preprocessing phase, we will do the following process as data file selection and filtering, feature extraction, and tokenization. These steps are designed to transform raw network traffic into structured representations suitable for semantic embedding and anomaly detection.
+    \subsection{Preprocess Model}
+    In the preprocessing phase, we will do the following processes as data file classify and clean, packet semantic extraction, and tokenization. These steps are designed to transform raw network traffic into structured representations suitable for semantic embedding and anomaly detection.
 
-\subsubsection{Classify and Clean Data}
+    \subsubsection{Classify and Clean Data}
 
-The first step in the preprocessing pipeline involves selecting and filtering the data files to ensure suitability for subsequent analysis. In this study, network traffic is collected and stored in the Comma-Separated Values (CSV) format—a widely adopted and flexible tabular data structure. CSV files are particularly well-suited for structured data representation due to their ease of parsing, compact storage, and seamless integration with mainstream data analysis libraries such as pandas and NumPy in Python. During this stage, only those CSV files containing the required packet-level features are retained, while incomplete, irrelevant, or malformed files are systematically excluded. After data format selection, the raw data is merged into a unified DataFrame and subjected to a series of cleaning procedures. At First, all column names are normalized by removing extraneous whitespace and converting naming conventions where necessary to ensure consistency across feature dimensions. Next, Column values containing missing or undefined values are removed to prevent bias in downstream training. Finally, cloumns contain only zeros will be removed.  During this stage, the resulting dataset serves as the foundation for the subsequent tokenization and embedding stages.
+    The first step in the preprocessing pipeline involves selecting and filtering data files to ensure their suitability for subsequent analysis. In this study, network traffic is collected and stored in the Comma-Separated Values (CSV) format, a widely adopted and flexible tabular data structure. CSV files are particularly well-suited for structured data representation due to their ease of parsing, compact storage, and seamless integration with mainstream data analysis libraries such as pandas and NumPy in Python.
 
-\subsubsection{Packet Semantic Extraction}
+    After selecting the data format, the raw data are merged into a unified DataFrame and subjected to a series of cleaning procedures. First, all column names are normalized by removing extraneous whitespace and converting naming conventions where necessary to ensure consistency across feature dimensions. Next, column values containing missing or undefined entries are removed to prevent bias in downstream training. Finally, columns that contain only zeros are discarded.
 
-After the dataset is cleaned and organized, the first step is to extract meaningful features from the network packet records to effectively characterize the behavior of each packet. Prior research has demonstrated that certain fields are particularly effective in identifying anomalous or malicious patterns in network traffic.
+    During this stage, the resulting dataset serves as the foundation for the subsequent tokenization and embedding stages.
 
-In this study, we focus on a set of key attributes that are widely adopted in anomaly detection systems, including:Flow Duration, Header Length, Protocol Type, Duration, Rate, fin flag number and syn flag number. These features are highly relevant in distinguishing between normal and abnormal connections. The dataset includes a wide variety of network attack types, such as \texttt{DDoS-RSTFINFlood}, \texttt{DoS-TCP\_Flood}, and \texttt{DDoS-ICMP\_Flood}, making it rich and diverse for anomaly detection research.
+    \subsubsection{Packet Semantic Extraction}
 
-In practical implementation, we employ Python-based tools to load each \texttt{.csv} file and extract the selected features as the primary input to the proposed S2GE-NIDS model. By focusing exclusively on these critical fields, the input data becomes cleaner and more interpretable, thereby enhancing the effectiveness and efficiency of the anomaly detection pipeline.
+    Packet semantic extraction refers to the process of identifying and transforming raw packet-level attributes into semantically meaningful representations that facilitate accurate anomaly detection. As summarized in Table~2.1, a set of representative features—such as \textit{Destination Port}, \textit{Protocol Type}, \textit{Flow Duration}, \textit{Packet Length}, \textit{Flow Bytes per Second}, \textit{TCP Flag Counts}, and \textit{Connection Count}—have been consistently validated in prior studies as effective indicators of anomalous or malicious traffic behavior.
 
 
-\subsubsection{Tokenization ID}
-After the relevant features have been extracted, the next step is to perform tokenization, which converts structured data into a format suitable for semantic embedding. Each data entry consists of multiple fields—such as \texttt{Destination Port}, \texttt{Protocol}, and \texttt{SrcIP}—that represent different aspects of network behavior.
 
-Tokenization is achieved by concatenating each field name with its corresponding value to form a unique string representation. If we use Table 3.1 as our example then the token ID is : Header Length 54、Flow Duration : 0.32817  and Protocol Type is TCP. This composite token serves as the semantic unit used in downstream embedding processes. For example, tokens follow the format \textit{"field name + field value"}, as illustrated in Table~\ref{tab:token_example}.
 
 
-\begin{table*}[htbp]
-    \centering
-    \caption{Example of Tokenized Input Fields} \label{tab:token_example}
-    \makebox[\linewidth][c]{
-        \renewcommand\arraystretch{1.2}{
-            \begin{tabular}{| l | l |}
-                \hline
-                \textbf{Field Name} & \textbf{Field Value} \\
-                \hline
-                Header Length       & 54                   \\
-                Flow Duration       & 0.32817              \\
-                Protocol Type       & TCP                  \\
-                \hline
-            \end{tabular}
-        }}
-\end{table*}
+    \subsubsection{Tokenization ID}
+    Following the feature extraction phase, the structured network traffic attributes undergo a tokenization process, wherein categorical feature fields are transformed into discrete, semantically interpretable string tokens. These tokens form the foundation for subsequent vector embedding. The dataset comprises multiple structured records, each containing various categorical attributes—such as \texttt{Destination Port}, \texttt{Protocol Type}, and \texttt{Source IP Address}—that capture the behavioral characteristics of individual traffic flows. By converting these symbolic fields into tokenized string representations, the model preserves both the identity and contextual meaning of traffic patterns, thereby enabling more effective semantic encoding in later stages.
 
 
 
-\subsection{Embedding Model}
-To mitigate redundancy in text features during the embedding process, we employ a lightweight, non-cryptographic hash function—MurmurHash3. This function ensures that input tokens are more uniformly distributed across the embedding space, thus reducing overrepresentation in specific regions. To further minimize the probability of hash collisions—i.e., multiple tokens being mapped to the same position—we apply a modulo operation to the resulting hash values. This yields a deterministic index used to locate or store each feature vector within a fixed-size embedding table, enhancing both the accuracy and efficiency of the overall embedding process.
+    Table~\ref{tab:token_example} shows the tokenization method employed, where each feature is transformed by concatenating its field name and corresponding value into a token. For example, \textit{"DestinationPort:80"}, \textit{"FlowDuration:0.32817"}, and \textit{"ProtocolType:TCP"}.
 
-Once all relevant token embeddings are retrieved, their vectors are concatenated into a single flattened, one-dimensional feature vector. This unified representation is then fed into a multi-layer perceptron (MLP), which learns high-level semantic abstractions and generates a compact semantic feature vector. The subsequent subsections provide detailed descriptions of the hash embedding mechanism, the flattening procedure, and the structure of the MLP used for semantic encoding.
+    \begin{table*}[htbp]
+        \centering
+        \caption{Example of Tokenization}
+        \label{tab:token_example}
+        \vspace{1em}
+        \makebox[\linewidth][c]{
+            \renewcommand\arraystretch{1.2}{
+                \begin{tabular}{| l | l | l |}
+                    \hline
+                    \textbf{Field Name} & \textbf{Field Value} & \textbf{Token}       \\
+                    \hline
+                    Destination Port    & 80                   & DestinationPort:80   \\
+                    Flow Duration       & 0.32817              & FlowDuration:0.32817 \\
+                    Protocol Type       & TCP                  & ProtocolType:TCP     \\
+                    \hline
+                \end{tabular}
+            }}
+    \end{table*}
 
-\subsubsection{Hash Embedding}
-Hash embedding is a lightweight vectorization technique that utilizes non-cryptographic hashing to encode tokenized field-value pairs into fixed-size, trainable embeddings~\cite{weinberger2009feature}. In this study, we adopt the MurmurHash3 algorithm—an efficient and widely used hash function—to map each token to a specific position in the embedding table. Its advantages include fast computation, uniform distribution, and language-independent implementation, which make it well-suited for scalable anomaly detection in IoT environments~\cite{appleby2011murmurhash}.
 
-To determine the target index for each token, we apply a modulo operation to the hash value using the smallest three-digit prime number, 1024. This approach distributes tokens more evenly within the embedding space and reduces collision rates. For example, the token generated from the field name \texttt{Protocol Type} may yield a MurmurHash3 value of 4283257230. Applying \texttt{4283257230 mod 1024} results in 56. If the associated port number (e.g., TCP) is similarly hashed and gives a value with mod 1024 result of 7, these indices (row 7, column 56) are used to locate the corresponding vector in the embedding table.
 
-Each embedding vector is initially randomized and refined during training. For instance, an example 8-dimensional vector might be:
+    \subsection{Embedding Model} %3.1.2
+    To convert network packet features into vector representations that can be processed by the model, this architecture employs an efficient embedding model. The entire process includes Hash Embedding, flattening to a one-class vector, and using a multilayer perceptron (MLP) to vector.
 
-Table~\ref{tab: EmbeddingTable} illustrates a subset of the embedding table used in our model. Each row corresponds to a unique index obtained by applying the MurmurHash3 function and modulo operation to a specific token (e.g., \texttt{Header\_Length\_54}). The resulting index is used to retrieve an 8-dimensional embedding vector, which captures semantic properties of the original field-value token. These vectors are subsequently concatenated and passed into the MLP encoder to generate a semantic representation.
 
-\begin{table*}[htbp]
-\centering
-\caption{Embedding Table} \label{tab: EmbeddingTable}
-\makebox[\linewidth][c]{
-    \renewcommand\arraystretch{1.2}{
-        \begin{tabular}{| l | c | c |}
-        \hline
-        Number & Vector \\
-        \hline
-        459 \& -0.982, -0.301, -0.555,  2.061,  0.045, -0.618, -0.786,  0.573
-        \hline
-        44 \& 0.120,  1.202, -0.337, -0.982,  0.847,  0.110,  0.305, -0.499
-        \hline
-        984 \& -0.024,  0.494,  0.754, -0.780, -1.002,  0.069, -0.520, -1.336
-        \hline
-        \end {tabular}
-    }}
-\end {table*}
 
+    \subsubsection{Hash Embedding} %3.1.2.1
+    Hash embedding is a lightweight vectorization technique that utilizes non-cryptographic hashing to encode tokenized field-value pairs into fixed-size, trainable embeddings. In this study, we adopt the MurmurHash3 algorithm, an efficient and widely used hash function, to map each token to a specific position in the embedding table. Its advantages include fast computation, uniform distribution, and language-independent implementation, making it well-suited for scalable anomaly detection in IoT environments.
 
+    To determine the target index for each token, we apply a modulo operation to the hash value using the smallest three-digit prime number, 233. This approach distributes tokens more evenly within the embedding space and reduces collision rates.
 
-These vectors are later concatenated and passed to the MLP model for further semantic encoding.
+    Figure~\ref{fig:EmbeddingFlow} presents a representative subset of the embedding table used in our model, where each token derived from structured field-value pairs is mapped to an index through hashing and modulo operations.
 
-In this study, we leverage the concept of \textit{Feature Hashing}~\cite{weinberger2009feature} to construct a two-dimensional embedding table that semantically encodes discrete field-value tokens. The embedding table is defined with dimensions $P \times D$, where $P = 1024$ is a selected prime number intended to reduce the probability of hash collisions, and $D = 8$ represents the dimensionality of the embedding vectors.
+    In this process, both field names and their corresponding values are individually hashed using the MurmurHash3 function. The resulting integers are then projected into a fixed index range via modulo operation with a prime number \(P=233\), producing bounded coordinates in the embedding table. For instance as Figure~\ref{fig:hashembedding}, the field name \texttt{Destination\_Port} yields an index of 129, while its value \texttt{80} maps to 166; these indices are used to locate specific embedding vectors.
 
-Each categorical input token (e.g., \texttt{Protocol:TCP}) is converted into an embedding through a dual-stage hashing process implemented with the MurmurHash3 algorithm:
+    Each vector is initialized randomly and refined during model training. The retrieved embeddings, such as the example 8-dimensional vector for indices (166, 129), capture semantic properties of the original tokens and are later concatenated as input to the MLP encoder for higher-level representation learning.
 
-\begin{itemize}
-    \item \textbf{Stage 1: Field Hashing.} The field name (e.g., \texttt{Protocol}) is hashed and mapped to a row index:
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.7\textwidth]{image/EmbeddingFlow.jpg}
+        \caption{Hash Embedding for Embedding Model}
+        \label{fig:EmbeddingFlow}
+    \end{figure*}
 
-          \begin{equation}
-              \text{row} = \text{MurmurHash3}(\text{field}) \bmod P
-              \label{eq:row_hash}
-          \end{equation}
 
-    \item \textbf{Stage 2: Value Hashing.} The field value (e.g., \texttt{TCP}) is independently hashed and mapped to a column index:
 
-          \begin{equation}
-              \text{col} = \text{MurmurHash3}(\text{value}) \bmod P
-              \label{eq:col_hash}
-          \end{equation}
-\end{itemize}
 
-Equations~\eqref{eq:row_hash} and~\eqref{eq:col_hash} are inspired by the Feature Hashing method proposed in~\cite{weinberger2009feature}, where we utilize MurmurHash3 as the underlying hash function~\cite{appleby2011murmurhash}.
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.4\textwidth]{image/2025-06-30 002218.jpg}
+        \caption{HashEmbedding Process}
+        \label{fig:hashembedding}
+    \end{figure*}
 
 
-This two-dimensional indexing scheme ensures that each field-value pair is assigned to a unique embedding vector in the table, while preserving sparsity and reducing memory consumption. By decoupling the field and value into separate hash functions, the design enhances semantic disentanglement and increases robustness against data sparsity and hash collisionsm ~\ref{fig:hashembedding}.
 
 
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width = 1\textwidth]{image/2025-06-30 002218.jpg}
-    \caption{FlowChart for Efficiency-based GP}
-    \label{fig: hashembedding}
-\end{figure*}
 
+    \newpage
+    \subsubsection{Flatten to One Class Vector}
+    The flatten operation concatenates the tokenized embeddings from each column into a single vector for input to the next stage of the pipeline. Table~\ref{tab:token_embedding_table} shows example embedding vectors for individual tokens, such as \texttt{Destination Port} 80 represented by [0.5012, 0.7061, 0.7705, 0.6871, 0.4636, 0.4809, 0.1913, 0.8319], \texttt{Flow Duration} 0.32817 represented by [0.227, 0.9268, 0.676, 0.9304, 0.5891, 0.3531, 0.2451, 0.9082], and \texttt{Protocol} TCP represented by [0.2309, 0.8674, 0.3565, 0.8259, 0.1846, 0.4375, 0.2524, 0.3008]. The final flattened vector is formed by concatenating these embeddings into a single vector is [0.5012, 0.7061, 0.7705, 0.6871, 0.4636, 0.4809, 0.1913, 0.8319, 0.227, 0.9268, 0.676, 0.9304, 0.5891, 0.3531, 0.2451, 0.9082, 0.2309, 0.8674, 0.3565, 0.8259, 0.1846, 0.4375, 0.2524, 0.3008].
 
 
 
-\subsubsection{Flatten to One Class Vector}
-Flatten will string the tokenized data into a single vector through the vectors after the embedding column. For example, Header Length 54 is [-0.982, -0.301, -0.555,  2.061,  0.045, -0.618, -0.786,  0.573], Flow Duration 0.32817 is [-0.024,  0.494,  0.754, -0.780, -1.002,  0.069, -0.520, -1.336] and Protocol TCP tokeniz is [0.120,  1.202, -0.337, -0.982,  0.847,  0.110,  0.305, -0.499], then the final flatten will be [-0.982, -0.301, -0.555, 2.061, 0.045, -0.618, -0.786, 0.573, -0.024, 0.494, 0.754, -0.78, -1.002, 0.069, -0.52, -1.336, -1.042, -0.116, 0.542, -0.987, 1.001, 0.086, 0.699, -0.903]
+    \begin{table}[htbp]
+        \scriptsize
+        \renewcommand{\arraystretch}{1.2}
+        \caption{HashValue of Embedding Table Value}
+        \vspace{1em}
+        \begin{tabular}{| c | c | c |l|}
+            \hline
+            \textbf{Token}    & \textbf{Hash} & \textbf{Mod=223} & \textbf{Embedding Vector}                                        \\
+            \hline
+            Destination\_Port & 1172070958    & 129              & [0.5012, 0.7061, 0.7705, 0.6871, 0.4636, 0.4809, 0.1913, 0.8319] \\
+            80                & 3167949985    & 166              &                                                                  \\
+            \hline
+            Flow\_Duration    & 2151518914    & 196              & [0.227, 0.9268, 0.676, 0.9304, 0.5891, 0.3531, 0.2451, 0.9082]   \\
+            0.32817           & 4143360759    & 20               &                                                                  \\
+            \hline
+            Protocol\_Type    & 56880774      & 164              & [0.2309, 0.8674, 0.3565, 0.8259, 0.1846, 0.4375, 0.2524, 0.3008] \\
+            TCP               & 3191464925    & 202              &                                                                  \\
+            \hline
+        \end{tabular}
+        \label{tab:token_embedding_table}
+    \end{table}
 
 
-\subsubsection{MLP to Vector}
 
 
 
+    \subsubsection{MLP to Vector}
+    To integrate the multiple field semantic vectors extracted from the embedding table for each packet into a unified semantic representation, a multi-layer perceptron (MLP) encoder module is introduced. The main task of this module is to map a flattened one-dimensional vector \(\mathbf{x} \in \mathbb{R}^{F \times d}\) to a fixed-dimensional semantic feature vector \(\mathbf{z} \in \mathbb{R}^k\), where \(F\) is the number of fields, \(d\) is the embedding dimension of each field, and \(k\) is the dimension of the output vector.
 
-\subsection{Mahalanobis Distance Model}
-In the final stage of the S2GE-NIDS framework, we apply a statistical distance-based method—\textbf{Mahalanobis Distance}—to evaluate whether an observed semantic vector deviates significantly from the expected distribution of normal traffic. This metric is particularly effective for high-dimensional anomaly detection, as it accounts for feature correlations and variance~\cite{de2000mahalanobis}.
+    In order to integrate multiple semantic vectors extracted from the embedding table for each field into a unified semantic representation, we designed a multi-layer perceptron (MLP) encoding module. The input layer accepts a flattened vector \(F\), where \(F\) is the number of fields and \(d\) is the dimension of the embedding vector for each field. This vector will be mapped to a fixed-dimensional semantic feature vector \(\mathbf{z} \in \mathbb{R}^k\), Where \(k\) is the dimension of the output sense vector.
 
-Let $\mathbf{x} \in \mathbb{R}^n$ denote the semantic vector output from the MLP, and let $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$ represent the mean vector and covariance matrix estimated from a subset of benign (normal) training data. The Mahalanobis distance is defined as:
+    The MLP is composed of multiple fully connected layers as in Figure~\ref{fig:MLP}.
 
-This formulation enables the model to assess how far a sample deviates from the learned semantic center under multivariate normality assumptions. During inference, if $D_M(\mathbf{x})$ exceeds a predefined threshold $\tau$, the corresponding traffic instance is flagged as an anomaly.
 
-We empirically determine $\tau$ using the distribution of distances in the training set, often by selecting a percentile threshold (e.g., 95th percentile). This thresholding strategy is advantageous in unsupervised or semi-supervised settings, where labeled anomaly samples may be scarce.
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.6\textwidth]{image/MLP.jpg}
+        \caption{Multilayer Perceptron architecture the full connection and ReLU activation from input layer to hidden layer to output layer}
+        \label{fig:MLP}
+    \end{figure*}
 
-The integration of Mahalanobis scoring into our system introduces the benefits of model interpretability and statistical rigor, effectively enhancing the ability to detect subtle but semantically meaningful deviations in IoT network behavior.
 
+    \subsection{Mahalanobis Distance Model}
+    In the final stage of the S2GE-NIDS framework, a statistical distance-based method—\textbf{Mahalanobis Distance}—is applied to evaluate whether an observed semantic vector deviates significantly from the expected distribution of normal traffic. This metric is particularly effective for high-dimensional anomaly detection, as it accounts for feature correlations and variance~\cite{de2000mahalanobis}.
 
-\subsubsection{Vector-to-Center Comparison}
-To enhance anomaly detection, S2GE-NIDS introduces a center loss mechanism. During training, all semantic vectors corresponding to ``normal'' samples are aggregated to calculate a center point $c$.
 
-\begin{itemize}
-    \item Taking into account the variability and correlation of each feature, the model can more accurately detect abnormal samples that are ``off-center''.
-\end{itemize}
 
-\begin{equation}
-    D_M(z) = \sqrt{(z - c)^T \Sigma^{-1} (z - c)} \tag*{\makebox[3.8cm][r]{\cite{mahalanobis1936generalized}}}
-    \label{eq:mahalanobis}
-\end{equation}
 
-$z$ is the semantic vector of the input sample, $c$ is the center vector of normal samples, and $\Sigma^{-1}$ is the inverse of the covariance matrix of the training data's embedding vectors.
 
+    \subsubsection{Vector-to-Center Comparison}
+    To enhance anomaly detection, S2GE-NIDS incorporates a center loss mechanism. During training, all semantic vectors corresponding to ``normal'' samples are aggregated to compute a center point \(c\).
 
-\subsubsection{Calculate the Loss}
-\begin{itemize}
-    \item The loss is defined as:
-\end{itemize}
 
-\begin{equation}
-    \mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \| z_i - c \|^2
-    = \frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{d} (z_{ij} - c_j)^2 \tag*{\makebox[3.8cm][r]{\cite{mlp2001universal}}}
-    \label{eq:centerloss}
-\end{equation}
 
-$z_i \in \mathbb{R}^d$ is the embedding vector obtained after the $i$th input passes through the Semantic Encoder,
-$c \in \mathbb{R}^d$ is the center point vector during training (center), and $N$ is the total number of samples.
+    By accounting for the variability and correlation of each feature, the model is able to more accurately detect abnormal samples that are ``off-center.''
 
 
 
-\subsubsection{Determine the Anomaly Score}
-After obtaining the semantic vector $z$ of each input data point through the MLP encoder, and computing the center point $c$ based on all normal training samples, the system evaluates how far each sample deviates from the normal data distribution using the Mahalanobis distance metric.
 
-The Mahalanobis distance score $D_M(z)$, as defined in Equation ~\ref{eq:liu2020anomaly}, quantifies the distance between a sample's semantic representation $z$ and the center vector $c$, while accounting for the variance and covariance of the embedding space. This distance serves as the anomaly score for each sample.
+    \begin{equation}
+        D_M(z) = \sqrt{(z - c)^T \Sigma^{-1} (z - c)} \tag*{\makebox[3.8cm][r]{\cite{mahalanobis1936generalized}}}
+        \label{eq:mahalanobiseq}
+    \end{equation}
 
-\begin{equation}
-    D_M(z) = \sqrt{(z - c)^T \Sigma^{-1} (z - c)} \tag*{\makebox[3.8cm][r]{\cite{de2000mahalanobis}}}
-\end{equation}
+    $z$ is the semantic vector of the input sample, $c$ is the center vector of normal samples, and $\Sigma^{-1}$ is the inverse of the covariance matrix of the training data's embedding vectors.
 
-To determine whether a sample is anomalous, we define a threshold $\tau$ based on the distribution of distances observed in the training data. A sample is classified as anomalous if its Mahalanobis distance exceeds this threshold:
 
-\begin{equation}
-    \text{Anomaly}(z) =
-    \begin{cases}
-        1 & \text{if } D_M(z) > \tau                                            \\
-        0 & \text{otherwise} \tag*{\makebox[3.8cm][r]{\cite{mlp2001universal}}}
-    \end{cases}
-\end{equation}
+    \subsubsection{Calculate the Loss}
+    \begin{itemize}
+        \item The loss is defined as:
+    \end{itemize}
 
-Here, $\tau$ can be determined in several ways, such as:
-\begin{itemize}
-    \item Using the mean plus $k$ standard deviations from the training distribution (e.g., $\tau = \mu + k\sigma$).
-    \item Setting $\tau$ based on a desired false-positive rate (e.g., the 95th percentile of $D_M(z)$ on normal samples).
-\end{itemize}
+    \begin{equation}
+        \mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \| z_i - c \|^2
+        = \frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{d} (z_{ij} - c_j)^2 \tag*{\makebox[3.8cm][r]{\cite{mlp2001universal}}}
+        \label{eq:centerloss}
+    \end{equation}
 
-This threshold-based mechanism enables the system to make binary decisions (normal vs. anomalous) while preserving the interpretability and statistical grounding of the anomaly scores. Additionally, ranked anomaly scores $D_M(z)$ can be used in top-$k$ selection scenarios for prioritizing the most suspicious samples in real-time applications.
+    $z_i \in \mathbb{R}^d$ is the embedding vector obtained after the $i$th input passes through the Semantic Encoder,
+    $c \in \mathbb{R}^d$ is the center point vector during training (center), and $N$ is the total number of samples.
 
 
 
+    \subsubsection{Determine the Anomaly Score}
+    After obtaining the semantic vector \(\mathbf{z}\) of each input data point through the MLP encoder, and computing the center point \(\mathbf{c}\) based on all normal training samples, the system evaluates how far each sample deviates from the normal data distribution using the Mahalanobis distance metric.
 
+    The Mahalanobis distance score \(D_M(\mathbf{z})\), quantifies the distance between a sample's semantic representation \(\mathbf{z}\) and the center vector \(\mathbf{c}\), while accounting for the variance and covariance of the embedding space. This distance serves as the anomaly score for each sample.
 
+    To determine whether a sample is anomalous, a threshold \(\tau\) is defined based on the distribution of distances observed in the training data. A sample is classified as anomalous if its Mahalanobis distance exceeds this threshold:
 
+    \begin{equation}
+        \text{Anomaly}(z) =
+        \begin{cases}
+            1 & \text{if } D_M(z) > \tau                                            \\
+            0 & \text{otherwise} \tag*{\makebox[3.8cm][r]{\cite{mlp2001universal}}}
+        \end{cases}
+    \end{equation}
 
-\section{Flow} %Chapter 3.2
-\subsection{Preprocess Model}
-As shown in the figure \ref{fig:FlowChart}, the system receives the uploaded network packet data and checks if the data format matches the CSV (Comma-Separated Values) format. If the data is not in CSV format, the system will prompt the user to re-upload the data. In the next stage, the system cleans the data fields, including removing any missing or empty fields from the packets.
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{image/FlowChart.jpg}
-    \caption{FlowChart for Preprocess Model}
-    \label{fig:FlowChart}
-\end{figure*}
+    This threshold-based mechanism enables the system to make binary decisions (normal vs. anomalous) while preserving the interpretability and statistical grounding of the anomaly scores.
 
-Subsequently, specific fields related to common anomaly detection features are extracted, such as Destination Port, Protocol Type, and Source IP (SrcIP). These fields serve as important inputs for subsequent model analysis.
 
-Finally, the field names and their respective values are combined into tokens---for instance, \texttt{Protocol\_TCP} or \texttt{Port\_80}---and fed into a semantic embedding model to be transformed into vectors for further processing.
 
 
 
-\subsection{Implementation Procedure}
-The system implementation is divided into several sequential stages, including: data preprocessing, feature transformation, semantic embedding, and anomaly detection. The detailed procedure is as follows:
+    \section{Flow} %Chapter 3.2
+    This section presents the flow of proposed system. The complete workflow consists of three main components: the Preprocessing Model, the Embedding Model, and the Mahalanobis Distance model.
 
-\textbf{Step 1. Input Network Packet Data}
-The raw data used in this study is stored in Comma-Separated Values (CSV) format. This format is chosen due to its ease of parsing and manageability. The dataset contains detailed information about various network packets.
+    \subsection{Preprocess Model}
+    As shown in Figure~\ref{fig:FlowChart}, the system receives the uploaded network packet data and verifies whether its format conforms to the CSV (Comma-Separated Values) format. We using Pandas and NumPy to data selection and cleaning stage. This includes standardizing column names, removing missing or undefined values, and deleting columns that contain only zeros to reduce noise.
 
-\textbf{Step 2. Data Cleaning and Filtering}
-After loading the dataset, the preprocessing phase is initiated. This phase includes data cleaning and filtering. The system removes missing values and clearly anomalous packet records to avoid introducing bias or errors in subsequent processing stages.
 
-\textbf{Step 3. Feature Selection}
-Based on insights from related research, specific key feature fields are selected from the raw packet data to serve as input for the model. These primarily include destination port, communication protocol, and source IP address. The selection is made based on the features’ effectiveness in distinguishing anomalous events.
 
-\textbf{Step 4. Feature Tokenization}
-To enhance the model’s ability to process both textual and numerical features, each feature field is combined with its corresponding value to form semantically meaningful tokens. For instance, a destination port of 80 is converted into the token “Port\_80”.
 
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 1\textwidth]{image/FlowChart.jpg}
+        \caption{Process for Preprocess Model}
+        \label{fig:FlowChart}
+    \end{figure*}
 
-\begin{figure*}[htbp]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{image/hashembedding.jpg}
-    \caption{Hash Embedding for Embedding Model}
-    \label{fig: HashEmbedding}
-\end{figure*}
+    We use specific fields related to common anomaly detection features are extracted, such as \texttt{Destination Port}, \texttt{Protocol Type}, and \texttt{Source IP} (\texttt{SrcIP}). These fields serve as important inputs for subsequent model analysis.
 
-\textbf{Step 5. Feature Hash Mapping}
-Since tokens often exhibit high redundancy and dimensionality, each token is passed through the MurmurHash3 hashing function (figure \ref{fig: HashEmbedding}) to generate a fixed-length hash value. This reduces dimensionality and ensures even distribution, thereby improving computational efficiency and mitigating potential collision issues.
+    Then, the field names and their respective values are combined into tokens—for example, \texttt{Protocol\_TCP} or \texttt{Port\_80}—and fed into a semantic embedding model to be transformed into vectors for further processing.
 
-\textbf{Step 6. Constructing the Embedding Table}
-Each hashed token is assigned a randomly initialized embedding vector. These vectors are stored in an embedding table that maps discrete hash values into a continuous vector space, facilitating the generation of semantic representations.
 
-\textbf{Step 7. Semantic Embedding}
-All token vectors associated with a given packet are concatenated and flattened into a single vector, which is then passed through a Multi-Layer Perceptron (MLP) to perform nonlinear transformation. The output is a semantically enriched vector representation of the packet.
 
-\textbf{Step 8. Establishing the Normal Sample Center Vector}
-To enable effective anomaly detection, the system computes the mean vector of all semantic vectors derived from normal packets during the training phase. This average vector serves as the center representation of normal traffic and is denoted as $c$.
 
-\textbf{Step 9. Anomaly Scoring via Mahalanobis Distance}
-During the detection phase, the system calculates the Mahalanobis distance $D_M(z)$ between the semantic vector $z$ of each incoming packet and the normal center vector $c$. If the computed distance exceeds a predefined threshold, the packet is classified as anomalous.
+    \subsection{Embedding Model}
+    In Figure~\ref{fig:hashembeddingflow}, this module is responsible for converting the structured semantic token sequence into a fixed-dimensional numerical vector representation. This module includes Hash Embedding, Flatten to One Class Vector, and MLP to Vector. Each of them contributes to the lightweight and scalable nature of the system.
 
-This systematic implementation procedure enables accurate and efficient anomaly detection on network packet data.
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 1\textwidth]{image/hashembedding.jpg}
+        \caption{Hash Embedding for Embedding Model}
+        \label{fig:hashembeddingflow}
+    \end{figure*}
 
+    Traditional one-hot or dictionary embedding methods require maintaining a vocabulary, which is inefficient for IoT packet data. Therefore, this study employs the non-cryptographic hash function MurmurHash3 to map each \texttt{<field name>:<value>} token to a trainable embedding position.
+
+    To map discrete feature tokens into a fixed-size embedding space without maintaining a predefined vocabulary, a dual-stage hash embedding strategy is utilized. Each token in the form of \texttt{<FieldName>:<Value>} is decomposed into two components: the field identifier and the associated value. Both components are independently processed by the MurmurHash3 function, which offers fast computation and near-uniform distribution.
+
+    Formally, for a given token $t = \texttt{Field:Value}$, we compute:
+
+    \begin{equation}
+        \text{row\_idx} = \text{MurmurHash3}(\texttt{Field}) \bmod P
+    \end{equation}
+
+    \begin{equation}
+        \text{col\_idx} = \text{MurmurHash3}(\texttt{Value}) \bmod P
+    \end{equation}
+
+    where $P = 233$ is a small prime number chosen to reduce the probability of hash collisions and to ensure efficient modular indexing.
+
+    The resulting $(\text{row\_idx}, \text{col\_idx})$ pair identifies a unique coordinate in the 2D embedding table $\mathbf{E} \in \mathbb{R}^{P \times P \times d}$, where each entry holds a trainable $d$-dimensional embedding vector.
+
+
+    Parameter Learning and Training Process of the MLP
+
+    In the proposed S2GE-NIDS system, the Multilayer Perceptron (MLP) sparse embedding vectors into low-dimensional continuous semantic representations. The MLP parameters, including weight matrices and bias vectors, are not manually set but are learned automatically during the neural network training process. The following details this process:
+
+
+    Parameter Initialization: At the beginning of training, all weight matrices $\mathbf{W}_i$ and bias vectors $\mathbf{b}_i$ are initialized randomly. Common initialization techniques, such as Xavier initialization \cite{glorot2010understanding}, ensure that gradients maintain appropriate scale to prevent vanishing during training.
+
+    Forward Propagation
+
+    Given an input vector $\mathbf{X} \in \mathbb{R}^{d_{\text{in}}}$, the MLP performs a series of linear transformations and nonlinear activations layer by layer, computing:
+
+
+    \begin{align}
+        \mathbf{H}_1 & = \sigma(\mathbf{W}_1 \mathbf{X} + \mathbf{b}_1)   \\
+        \mathbf{H}_2 & = \sigma(\mathbf{W}_2 \mathbf{H}_1 + \mathbf{b}_2) \\
+                     & \vdots \nonumber                                   \\
+        \mathbf{Z}   & = \mathbf{W}_L \mathbf{H}_{L-1} + \mathbf{b}_L
+    \end{align}
+
+    where $\sigma(\cdot)$ is typically the ReLU activation function defined as:
+
+    \begin{equation}
+        \mathrm{ReLU}(z) = \max(0, z)
+    \end{equation}
+
+    and $\mathbf{Z} \in \mathbb{R}^k$ represents the output semantic vector.
+
+    Loss Function Computation: During training, a loss function $\mathcal{L}$ measures the discrepancy between the model output and the target. For example, using a center loss \cite{wen2016discriminative} to encourage semantic vectors of normal samples to cluster around a center $\mathbf{c}$:
+
+
+    \begin{equation}
+        \mathcal{L} = \frac{1}{N} \sum_{i=1}^N \| \mathbf{z}_i - \mathbf{c} \|^2
+    \end{equation}
+
+    Iterative Training: This process is repeated over multiple epochs on the training dataset. Through iterative updates, the model gradually minimizes the loss, improving its ability to distinguish normal and anomalous samples.
+
+    給一個總結
+
+
+
+    \subsection{Mahalanobis Distance Model}
+    In this section, we present an anomaly detection method based on the Mahalanobis distance as the core model for decision making. The discussion is organized into three parts: Vector-to-Center Comparison, Calculate the Loss, and Determin the Anomaly Score.
+    注重flow，不是架構
+
+    Given $N$ semantic vectors $\mathbf{z}_1, \dots, \mathbf{z}_N$ generated from benign training data, we first compute the statistical mean (center) vector $\boldsymbol{c}$ and covariance matrix $\boldsymbol{\Sigma}$:
+
+    \begin{equation}
+        \boldsymbol{c} = \frac{1}{N} \sum_{i=1}^{N} \mathbf{z}_i
+    \end{equation}
+
+    \begin{equation}
+        \boldsymbol{\Sigma} = \frac{1}{N - 1} \sum_{i=1}^{N} (\mathbf{z}_i - \boldsymbol{c})(\mathbf{z}_i - \boldsymbol{c})^T
+    \end{equation}
+
+
+
+    For any test vector $\mathbf{z}$, the Mahalanobis distance $D_M(\mathbf{z})$ from the normal distribution is calculated as:
+
+    \begin{equation}
+        D_M(\mathbf{z}) = \sqrt{(\mathbf{z} - \boldsymbol{c})^T \boldsymbol{\Sigma}^{-1} (\mathbf{z} - \boldsymbol{c})}
+    \end{equation}
+
+    A larger distance indicates a greater deviation from the normal behavior, suggesting a higher probability of being anomalous.
+
+
+
+    We define a threshold $\tau$ based on the distribution of $D_M(\cdot)$ in the training data (e.g., 95th percentile).
+
+    \begin{equation}
+        \text{Anomaly}(\mathbf{z}) =
+        \begin{cases}
+            1, & \text{if } D_M(\mathbf{z}) > \tau \\
+            0, & \text{otherwise}
+        \end{cases}
+    \end{equation}
+
+
+
+    \begin{itemize}
+        \item \textbf{Input}: Semantic vector $\mathbf{z} \in \mathbb{R}^k$ (from MLP)
+        \item \textbf{Output}: Anomaly score $D_M(\mathbf{z})$ and binary decision
+        \item \textbf{Computation}: Based on $\boldsymbol{c}$ and $\boldsymbol{\Sigma}$ estimated from training data
+    \end{itemize}
+
+
+
+    \begin{itemize}
+        \item \textbf{Unsupervised}: Requires only benign data for training
+        \item \textbf{Interpretable}: Outputs a clear statistical distance as anomaly score
+        \item \textbf{Statistically Sound}: Incorporates feature correlation via covariance
+        \item \textbf{Efficient}: Only requires mean and covariance estimation once during training
+    \end{itemize}
+
+
+    總結: 1就是異常，0就是正常
 
 \end{ZhChapter}

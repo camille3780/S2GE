@@ -1,0 +1,30 @@
+MLP consists of several layers of Fully Connected Layers, each of which combines an activation function with a regularization mechanism. The specific structure is as follows:
+
+    \begin{itemize}
+        \item \textbf{Input layer}：Input all field vectors as $\mathbf{x} \in \mathbb{R}^{F \times d}$。
+        \item \textbf{Hidden Layer 1}：
+              \[
+                  \mathbf{h}^{(1)} = \text{Dropout}\left(\text{ReLU}\left(\mathbf{W}^{(1)} \mathbf{x} + \mathbf{b}^{(1)}\right)\right),\quad \mathbf{W}^{(1)} \in \mathbb{R}^{128 \times (F \cdot d)}
+              \]
+        \item \textbf{Hidden Layer 2}：
+              \[
+                  \mathbf{h}^{(2)} = \text{BatchNorm}\left(\text{ReLU}\left(\mathbf{W}^{(2)} \mathbf{h}^{(1)} + \mathbf{b}^{(2)}\right)\right),\quad \mathbf{W}^{(2)} \in \mathbb{R}^{64 \times 128}
+              \]
+        \item \textbf{Hidden Layer 3}：
+              \[
+                  \mathbf{h}^{(3)} = \text{ReLU}\left(\mathbf{W}^{(3)} \mathbf{h}^{(2)} + \mathbf{b}^{(3)}\right),\quad \mathbf{W}^{(3)} \in \mathbb{R}^{32 \times 64}
+              \]
+        \item \textbf{Output Layer}：
+              \[
+                  \mathbf{z} = \mathbf{W}^{(4)} \mathbf{h}^{(3)} + \mathbf{b}^{(4)},\quad \mathbf{W}^{(4)} \in \mathbb{R}^{k \times 32}
+              \]
+    \end{itemize}
+
+
+    Each hidden layer uses the ReLU activation function to introduce nonlinear characteristics, which is in the form of:
+    \[
+        \text{ReLU}(x) = \max(0, x)
+    \]
+    To prevent overfitting, the Dropout operation is introduced after the first layer. During each forward propagation, some neurons are randomly turned off with a fixed probability $p$ to prevent the model from over-relying on certain features, thereby reducing overfitting and preventing them from participating in the calculation in this round of training. This random deactivation behavior forces the model not to over-rely on certain neurons, thereby improving its generalization ability. During the training phase, some neurons are deactivated with a random probability of $p = 0.2$. The second layer introduces the Batch Normalization operation to accelerate convergence and stabilize training.
+
+    Finally output will be $\mathbf{z} \in \mathbb{R}^k$ is the semantic vector of each packet and can be used as the input feature of the anomaly detection or classification module.
