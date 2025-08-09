@@ -1,9 +1,20 @@
 \begin{ZhChapter}
 
-    \chapter{Results}
+    \chapter{Results and Analysis}
 
-    In this section, we will further present
-    We calculated the Mahalanobis anomaly scores for each sample and the range, mean, and standard deviation of these scores.
+    In this section, we further present the results of anomaly detection by calculating the Mahalanobis anomaly scores for each sample. We analyze the range, mean, and standard devsiation of these scores to evaluate the model's capability in identifying anomalous behavior.
+
+    \section{Evaluation Result}
+
+
+
+    In S2GE, the dataset is partitioned into three distinct subsets to facilitate effective model training and evaluation: 70\% of the data is allocated for training, 15\% for validation, and the remaining 15\% for testing. The training subset provides sufficient data for the model to learn underlying patterns and representations. The validation subset is employed during training to tune hyperparameters and monitor performance, thereby mitigating the risk of overfitting. Finally, the independent testing subset is reserved for unbiased evaluation of the model's generalization capability, ensuring that the reported performance reflects real-world applicability.
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.4\textwidth]{image/TrainPresentation.png}
+        \caption{Dataset split ratio for training, validation, and testing}
+        \label{fig:3133}
+    \end{figure*}
 
 
 
@@ -12,118 +23,97 @@
 
     \begin{table}[htbp]
         \centering
-        \caption{Calculate the Mahalanobis Anomaly Values}
+        \caption{Statistical Summary of Mahalanobis Anomaly Scores on the Training Dataset}
+        \vspace{1em}
         \label{tab:mahalanobis_scores}
         \begin{tabular}{|c|c|}
             \hline
-            \textbf{Metric}     & \textbf{Value}    \\
+            \textbf{Metric}     & \textbf{Value}   \\
             \hline
-            Anomaly Score Range & 2.5268 -- 71.3353 \\
-            Mean Anomaly Score  & 16.0000           \\
-            Standard Deviation  & 7.1570            \\
+            Anomaly Score Range & 2.6578 -- 5.9151 \\
+            Mean Anomaly Score  & 3.946            \\
+            Standard Deviation  & 0.5976           \\
             \hline
         \end{tabular}
     \end{table}
 
 
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.5\textwidth]{image/v6.jpg}
+        \caption{Statistical of the training dataset}
+        \label{fig:v6}
+    \end{figure*}
 
 
-
-    Additionally, the anomaly scores for selected samples are presented to provide an intuitive understanding of the model's evaluation of anomaly levels across different data points.
+    Additionally, the anomaly scores for selected samples are presented to provide an intuitive understanding of the model's evaluation of anomaly levels across different data points. Figure~\ref{fig:v6} shows the anomaly detection of statistical information.
 
 
 
     Model Training Results
     In each epoch, the model will traverse all training data and adjust parameters according to the loss function to minimize the prediction error.
 
-    During the training process, the loss value decreases steadily with Epoch, and the specific values are shown in the figure~\ref{fig:Train}:
 
 
     \begin{figure*}[htbp]
         \centering
-        \includegraphics[width = 1\textwidth]{image/Train.jpg}
-        \caption{The loss value of each Epoch during model training}
+        \includegraphics[width = 0.6\textwidth]{image/L_20.jpg}
+        \caption{Epoch-wise Loss Values Recorded During Model Training}
         \label{fig:Train}
     \end{figure*}
 
-    圖5.1主要說明訓練過程中的緩慢降低，沒有過度擬和的狀況，數字從0.78緩慢降到0.18，。結果補充多一點!!!
+
+    Figure~\ref{fig:Train} shows the gradual decline in the loss value during model training. It can be observed that the loss value steadily and slowly decreases from the initial value of about 0.6186 to the final value of 0.18, indicating that the model does not overfit during the training process. In addition, the smooth decline in the loss value shows that the training process is stable, the model gradually learns effective features, and improves the prediction accuracy. Such a downward trend verifies the rationality of the adopted training strategy and parameter settings, which helps the model's generalization ability on the test data.
+
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.4\textwidth]{image/threshould_1.jpg}
+        \caption{Distribution of Mahalanobis distances with 1 standard deviation}
+        \label{fig:threshould_1}
+    \end{figure*}
+
+    \begin{figure*}[!t]
+        \centering
+        \includegraphics[width = 0.4\textwidth]{image/threshould_2.jpg}
+        \caption{Distribution of Mahalanobis distances with 2 standard deviation}
+        \label{fig:threshould_2}
+    \end{figure*}
+
+    Figure~\ref{fig:threshould_1} and figure~\ref{fig:threshould_2} shows the histogram, which illustrates the frequency of samples within different distance intervals. The red dashed line represents the anomaly threshold, where samples exceeding this value are classified as anomalies. They provide the insight into data concentration and anomaly distribution.
+
+    To evaluate the effectiveness of the proposed model, several metrics including accuracy, precision, recall, and F1-score are employed. These evaluation indicators provide a comprehensive and balanced assessment of the model's performance in anomaly detection tasks.
 
 
-
-    放到測試資料下面
-    In order to verify the effectiveness of the model trained in this study, we used an independent test data set for evaluation. The evaluation indicators include accuracy, precision, recall and F1-score, which can fairly reflect the anomaly detection of the model.
-
-    The range of anomaly scores is between 2.77 and 56.99, with an average score of about 16.00 and a standard deviation of 5.82, indicating that most samples are concentrated in the middle area in the feature space. According to the set 99\% threshold (34.33), a total of 2,387 abnormal samples were detected, accounting for about 1.0\% of the total number of samples.
-
-    The top 20 samples with the highest anomaly scores were analyzed, and their anomaly scores were significantly higher than the threshold, and the model successfully identified potential abnormal behaviors. In contrast, the anomaly scores of the top 20 normal samples were all lower than the threshold, indicating that the model can effectively distinguish between normal and abnormal samples.
-
-
-    The training set consists of \(N=15,000\) normal packet samples, while the test set includes \(M=5,000\) anomalous samples and \(3,000\) normal samples. These are mixed for unsupervised anomaly detection evaluation.
-
-    If the message is displayed successfully, it indicates that the environment has been correctly set up.
-
-    We observed the distribution of Mahalanobis distances for normal packets and selected the 95th percentile of this distribution as the anomaly detection threshold \(\tau\). This strategy is based on the statistical assumption that 5\% of the additional samples may represent potential anomalies.
-
-    Furthermore, cross-validation with \(k=5\) folds was employed by partitioning the training data. After each training, the center and distance distribution of normal samples were recalculated. The optimal percentile threshold, ranging from 93\% to 96\%, was determined based on the best F1-score of each fold. Ultimately, a fixed threshold of 95\% was selected as the balance point.
 
 
 
     \begin{figure*}[htbp]
         \centering
-        \includegraphics[width = 0.4\textwidth]{image/NormalSample.jpg}
-        \caption{訓練的結果}
+        \includegraphics[width = 0.5\textwidth]{image/NormalSample.jpg}
+        \caption{Mahalanobis Distances and Classification Results of Normal Samples}
         \label{fig:NS}
     \end{figure*}
 
 
     \begin{figure*}[htbp]
         \centering
-        \includegraphics[width = 0.4\textwidth]{image/AbnormalSample.jpg}
-        \caption{FlowChart for Efficiency-based GP}
+        \includegraphics[width = 0.5\textwidth]{image/AbnormalSample.jpg}
+        \caption{Mahalanobis Distances and Classification Results of Anomalous Samples}
         \label{fig:AS}
     \end{figure*}
 
 
 
-
     \newpage
-    \subsection{Compare with other method}
-    In order to evaluate the effectiveness of our proposed anomaly detection model, we compared it against several baseline methods commonly used in the literature, including Isolation Forest, One-Class SVM, AutoEncoder, and a basic statistical thresholding approach.
-
-    The selected comparison methods as Table~\ref{tab:method_versions_refs} include Isolation Forest~\cite{liu2008isolation}, One-Class SVM~\cite{scholkopf2001estimating}, AutoEncoder~\cite{sakurada2014anomaly}, and a simple Statistical Thresholding approach. Isolation Forest and One-Class SVM are popular unsupervised and semi-supervised algorithms known for their efficiency and broad applicability. AutoEncoder leverages neural network-based reconstruction to identify anomalies, which is widely utilized in recent anomaly detection research. Statistical Thresholding provides a straightforward, interpretable baseline based on statistical properties of feature distributions.
-
-
-
-    \begin{table}[htbp]
-        \centering
-        \caption{Comparison of Methods, Version Information, and References}
-        \vspace{1em}
-        \label{tab:method_versions_refs}
-        \begin{tabular}{|c|c|c|p{6cm}|}
-            \hline
-            \textbf{Method}       & \textbf{Library} & \textbf{Version} & \textbf{Description}                                                                                                 \\
-            \hline
-            Isolation Forest      & scikit-learn     & 1.2.2            & \text{Unsupervised anomaly detection us} \text{ing} \text{isolation trees. Baseline method} \cite{liu2008isolation}. \\
-            \hline
-            One-Class SVM         & scikit-learn     & 1.2.2            & Novelty detection with support vector machines. Sensitive to parameters \cite{scholkopf2001estimating}.              \\
-            \hline
-            AutoEncoder           & PyTorch          & 2.0.1            & \text{Neural network for data reconstruc}\text{tion-based anomaly detection} \cite{sakurada2014anomaly}.             \\
-            \hline
-            Statistical Threshold & N/A              & N/A              & Thresholding on z-score for feature-based anomaly detection. Simple and fast.                                        \\
-            \hline
-            S2GE-Nids             & S2GE             & v1.0             & Semantic embedding tailored for IoT anomaly detection, leveraging graph structures and domain knowledge              \\
-            \hline
-        \end{tabular}
-    \end{table}
-
-
     By benchmarking the proposed S2GE model against these methods under identical experimental conditions, we aim to highlight its advantages in terms of detection accuracy, recall, F1-score, and computational efficiency. This comparison also serves to demonstrate the capability of semantic embedding tailored for IoT data, particularly in capturing complex event relationships that conventional methods may overlook.
+
+
     Let
     \begin{itemize}
-        \item $TP$ (True Positive): Number of correctly predicted anomalous samples,
-        \item $TN$ (True Negative): Number of correctly predicted normal samples,
-        \item $FP$ (False Positive): Number of normal samples incorrectly predicted as anomalous,
-        \item $FN$ (False Negative): Number of anomalous samples incorrectly predicted as normal.
+        \item $TP$ (True Positive): Events correctly identified as anomalies by the model.
+        \item $TN$ (True Negative): Events correctly identified as normal.
+        \item $FP$ (False Positive): Normal events incorrectly classified as anomalies, i.e., false alarms.
+        \item $FN$ (False Negative): Anomalies mistakenly classified as normal events, i.e., missed detections.
     \end{itemize}
 
     The metrics are calculated as:
@@ -148,41 +138,110 @@
     \end{equation}
     The F1-score is the harmonic mean of Precision and Recall, providing a balance between the two.
 
-    Additionally, the Receiver Operating Characteristic (ROC) curve was plotted to evaluate the trade-off between the true positive rate and false positive rate at various threshold settings. The false positive rate (FPR) is defined as:
+    Among these, the False Positive Rate (FPR) is a critical metric in cybersecurity, defined as the proportion of normal events incorrectly flagged as anomalies:
 
     \begin{equation}
         \text{FPR} = \frac{FP}{FP + TN}
     \end{equation}
 
+    A high false positive rate can overwhelm security analysts with excessive false alarms, increasing operational costs, reducing system trustworthiness, and potentially causing genuine threats to be overlooked. Therefore, it is essential to design and evaluate anomaly detection systems to minimize the false positive rate while maintaining a high detection rate (recall) to achieve optimal practical performance.
+
+    The confusion matrix also facilitates the computation of other vital metrics such as Precision, Recall, and F1-score, enabling a comprehensive assessment of the model's effectiveness and robustness.
+
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 0.5\textwidth]{image/confusion_matrix.png}
+        \caption{The confusion matrix of S2GE Anomalous Detection}
+        \label{fig:confusion_matrix}
+    \end{figure*}
+
+
+
+    Figure~\ref{fig:confusion_matrix} shows the proposed S2GE-NIDS model was evaluated on the designated test set consisting of 2,904 samples, including 2,894 benign and 10 anomalous instances. The confusion matrix (Figure X) illustrates the model's classification performance, showing perfect discrimination between normal and anomalous network traffic.
+
+    Specifically, the model achieved a true negative count of 2,894 and a true positive count of 10, with zero false positives and false negatives. Consequently, the evaluation metrics reached their maximum values: an accuracy of 1.0000, precision of 1.0000, recall of 1.0000, and an F1-score of 1.0000. These results demonstrate that the model perfectly identified all anomalous samples without any misclassification.
+
+    While these findings indicate excellent model efficacy on the test dataset, it is noteworthy that the anomalous sample size is limited (n=10), which may affect the statistical robustness of the evaluation. Future work should involve validating the model on larger and more diverse datasets to assess its generalizability and resilience to varied attack patterns.
+
+
+
+    \section{Compare with other methods}
+    In order to evaluate the effectiveness of our proposed Structured Semantics and Generation Embedded Network Intrusion Detection System (S2GE-NIDS) anomaly detection model, we compared it against several baseline methods commonly used in the literature, including Isolation Forest, One-Class SVM, AutoEncoder, and a basic statistical thresholding approach.
+
+
 
     As shown in the Table~\ref{tab:performance_comparison}, our method consistently outperforms the baselines across all evaluation metrics. Notably, the S2GE model achieves higher recall and F1-score values, indicating its superior ability to correctly identify anomalous events while maintaining low false positive rates. The enhanced performance can be attributed to the semantic embedding approach that effectively captures the complex temporal and relational patterns inherent in IoT data, which traditional methods struggle to model.
 
 
+    The evaluation of the proposed S2GE-NIDS framework was conducted on the publicly available CICIoT2024 benchmark dataset, comprising 238,687 network traffic samples with 10 distinct features. The dataset was split into training, validation, and test subsets with ratios of 70\%, 15\%, and 15\% respectively.
 
-    \begin{table}[htbp]
+    The anomaly scores for each sample were calculated based on the Mahalanobis distance between semantic embeddings generated by the MLP encoder and the learned center vector representing normal behavior.
+
+    \begin{table}[!t]
         \centering
-        \caption{Performance Comparison of Anomaly Detection Methods}
+        \caption{Statistical Summary of Anomaly Scores on the Training Dataset}
         \vspace{1em}
-        \label{tab:performance_comparison}
-        \begin{tabular}{|l|c|c|c|c|}
+        \label{tab:StatisticalData}
+        \begin{tabular}{|c|p{7cm}|}
             \hline
-            \textbf{Method}                              & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Inference Time (ms/sample)} \\
+            \textbf{Method}     & \textbf{Statistical Data} \\
             \hline
-            Isolation Forest~\cite{liu2008isolation}     & 0.82               & 0.78            & 0.80              & 1.2                                 \\
-            One-Class SVM~\cite{scholkopf2001estimating} & 0.75               & 0.70            & 0.72              & 3.5                                 \\
-            AutoEncoder~\cite{sakurada2014anomaly}       & 0.85               & 0.83            & 0.84              & 2.5                                 \\
-            Statistical Thresholding                     & 0.65               & 0.60            & 0.62              & 0.5                                 \\
+            Anomaly Score Range & 2.464 -- 6.0292           \\
             \hline
-            \textbf{S2GE Method}                         & \textbf{0.86}      & \textbf{0.90}   & \textbf{0.88}     & \textbf{0.8}                        \\
+            Mean Anomaly Score  & 3.9361                    \\
+            \hline
+            Standard Deviation  & 0.6594                    \\
             \hline
         \end{tabular}
     \end{table}
 
 
 
+    Evaluation on the independent test dataset yielded the following performance metrics:
+
+    \begin{itemize}
+        \item \textbf{Accuracy}: 0.9769
+        \item \textbf{Precision}: 1.0000
+        \item \textbf{Recall}: 0.9772
+        \item \textbf{F1-score}: 0.9885
+    \end{itemize}
 
 
-    The area under the ROC curve (AUC) quantifies the overall classification performance, with values ranging from 0 to 1. An AUC of 1 represents a perfect classifier. In this study, the model achieved an AUC of 0.98, demonstrating excellent classification capability.
+    The 99th percentile Mahalanobis distance threshold was set to 34.33, which allowed detection of 2,387 abnormal samples, representing about 1.0\% of the total test samples.
+
+    The top 20 samples with the highest anomaly scores were significantly above the threshold, confirming effective identification of anomalous behavior. Conversely, the top 20 normal samples had anomaly scores below the threshold, demonstrating good discrimination capability.
+
+    \begin{table}[htbp]
+        \centering
+        \caption{Performance Comparison of Various Anomaly Detection Methods}
+        \vspace{1em}
+        \label{tab:performance_comparison}
+        \begin{tabular}{|l|c|c|c|}
+            \hline
+            \textbf{Method}                          & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+            \hline
+            Isolation Forest~\cite{huang2025machine} & 0.85               & 0.90            & 0.87              \\
+            One-Class SVM~\cite{huang2025machine}    & 0.85               & 0.80            & 0.80              \\
+            Statistical ~\cite{huang2025machine}     & 0.65               & 0.50            & 0.60              \\
+            \hline
+            \textbf{S2GE Method}                     & \textbf{0.9769}    & \textbf{1}      & \textbf{0.9772}   \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+
+    \begin{figure*}[htbp]
+        \centering
+        \includegraphics[width = 1\textwidth]{image/Method.png}
+        \caption{Mahalanobis Distances and Classification Results of Anomalous Samples}
+        \label{fig:method_compare}
+    \end{figure*}
+
+    \newpage
+    Figure~\ref{fig:method_compare} shows that performance comparison of different anomaly detection methods on Precision, Recall, and F1-score metrics.
+    The purple line represents the proposed S2GE method, which achieves the highest scores across all three metrics.
+    Isolation Forest (blue) and AutoEncoder (green) demonstrate moderate performance,
+    This visualization clearly highlights the superior detection capability of S2GE in terms of both accuracy and recall.
 
 
 

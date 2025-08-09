@@ -17,16 +17,18 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb}  % 提供 \mathbb 等符號
 
+
 \usepackage[backend=bibtex,style=ieee,sorting=none]{biblatex}   
 
 % 設定作者列出規則：少於7位全部列出，7位(含)以上用et al.
 \DefineBibliographyExtras{english}{%
   \protected\def\bibnamedelima{\addcomma\space}%
-  \protected\def\bibnamedelimb{\addcomma\space}%
+  \protected\def\bibnamedelimb{\addcomm
+  a\space}%
 }
 \AtBeginBibliography{%
-  \setcounter{maxnames}{6} % 作者最多列出6位，7位以上用et al.
-  \setcounter{minnames}{6} % 超過6位才用et al.
+  \setcounter{maxnames}{99} % 作者最多列出6位，7位以上用et al.
+  \setcounter{minnames}{99} % 超過6位才用et al.
 }
 
 \renewcommand{\baselinestretch}{1.5}
@@ -82,5 +84,7 @@
 \include{chapter/chapter6-Conclusion.tex}
 
 \include{page/reference}
+\clearpage
+
 
 \end{document}

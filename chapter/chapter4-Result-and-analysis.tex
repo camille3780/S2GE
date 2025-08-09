@@ -1,15 +1,16 @@
 \begin{ZhChapter}
 
     \chapter{Implementation}
-    The experimental implementation of this study is conducted on the Windows 11 operating system. Visual Studio Code (VS Code) is utilized as the primary development environment, integrated with the Anaconda distribution for Python to manage package dependencies and virtual environments. A range of scientific computing and machine learning packages are installed to facilitate algorithm development, model training, and evaluation workflows. Detailed configuration steps and setup instructions are described in the following subsection.
+    The experimental implementation of this study is conducted on the Windows 11 operating system. Detailed configuration steps and set up instructions are described in the following subsection, including hardware and software requirements, environment set up and dataset preparation.
+
 
     \section{Hardware  and Software Requirements}
-
+    \subsection{Environment Set up}
     Table \ref{table:hardware} provides detailed specifications of each hardware component utilized in our experimental environment and Table~\ref{tab:software} lists the software used in our experimental, along with their purposes and license types.
 
     \begin{table*}[htbp]
         \centering
-        \caption{Hardware Requirements} \label{table:hardware}
+        \caption{Hardware Requirements for the Experiment} \label{table:hardware}
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.2}{
                 \begin{tabular}{| l | l |}
@@ -27,7 +28,7 @@
 
     \begin{table*}[htbp]
         \centering
-        \caption{Software and Libraries Used in the Experiment} \label{tab:software}
+        \caption{Software and Libraries Utilized in the Experiment} \label{tab:software}
         \vspace{1em}
         \makebox[\linewidth][c]{
             \renewcommand\arraystretch{1.2}{
@@ -45,9 +46,9 @@
                     \hline
                     Scikit-learn~\cite{scikit-learn} & 1.4.2   & Provides a wide range of machine learning algorithms, particularly the Multi-Layer Perceptron (MLP) classifier used in this study.                         & BSD            \\
                     \hline
-                    mmh3~\cite{mmh3}                 & 4.0.1   & Implements MurmurHash3, a fast non-cryptographic hashing function used to convert tokens into integer values for embedding.                                & MIT            \\
+                    mmh3~\cite{senuma2025mmh3}       & 4.0.1   & Implements MurmurHash3, a fast non-cryptographic hashing function used to convert tokens into integer values for embedding.                                & MIT            \\
                     \hline
-                    PyTorch~\cite{torch}             & 2.2.2   & A deep learning framework used to define and train neural networks, including custom embedding and classification models.                                  & BSD            \\
+                    PyTorch~\cite{imambi2021pytorch} & 2.2.2   & A deep learning framework used to define and train neural networks, including custom embedding and classification models.                                  & BSD            \\
                     \hline
                 \end{tabular}
             }
@@ -56,32 +57,33 @@
 
 
     \newpage
-    \section{Environment Setup}
-    This section will mainly introduce the installation procedures and environment setup required for the S2GE system. To ensure dependency management and maintain an isolated environment, Python virtual environments must be set up first. The intallation steps are listed below:
+    \subsection{Environment Setup}
+    This section will mainly introduce the installation procedures and environment setup required for the Structured Semantics and Generation Embedded Network Intrusion Detection System (S2GE-NIDS). To ensure dependency management and maintain an isolated environment, Python virtual environments must be set up first. The intallation steps are listed below:
 
     1. Install Ubuntu
-    Before experiment,  it is necessary to install Ubuntu (as shown in Figure~\ref{fig:Ubuntu}) Download the Ubuntu of version 24.04 on the official website.
 
-    After confirming the installation, you can confirm the current version by entering cat os.
+    Before experiment,  it is necessary to install Ubuntu (as shown in Figure~\ref{fig:Ubuntu}) Download the Ubuntu of version 24.04 on the official website.\\
+
+    After confirming the installation, you can confirm the current version as below.
 
     \begin{verbatim}
-    python3 -m venv ~/nids_env
-    source ~/nids_env/bin/activate
+    cat /etc/os-release
     \end{verbatim}
     \begin{figure*}[htbp]
         \centering
-        \includegraphics[width = 0.8\textwidth]{image/Ubuntu.jpg}
-        \caption{Install an Ubuntu environment }
+        \includegraphics[width = 0.6\textwidth]{image/Ubuntu.jpg}
+        \caption{Installation Procedure of the Ubuntu Operating System Environment}
         \label{fig:Ubuntu}
     \end{figure*}
 
     2. Install Python
+
     Download the Python package on the office website, (see Figure~\ref{fig:Python}) for this study.
 
     \begin{figure*}[htbp]
         \centering
-        \includegraphics[width = 0.8\textwidth]{image/python.jpg}
-        \caption{Installation the python package}
+        \includegraphics[width = 0.4\textwidth]{image/python.jpg}
+        \caption{Installation Procedure of the Python Package}
         \label{fig:Python}
     \end{figure*}
 
@@ -100,12 +102,12 @@
 
 
 
-    Figure~\ref{fig:Nids}.
+    Figure~\ref{fig:Nids} shows how to enable virtual environment.
 
     \begin{figure*}[htbp]
         \centering
         \includegraphics[width = 1\textwidth]{image/Nids-env.jpg}
-        \caption{Create an independent Python executionnids environment in the current folder.}
+        \caption{Setup of an Independent Python Virtual Environment}
         \label{fig:Nids}
     \end{figure*}
 
@@ -131,12 +133,17 @@
 
 
     \subsection{Data Preparation}
-    In this experiment utilizes the latest 2024Internet of Things (IoT) dataset~\cite{ciciot2024} as the source of experimental data. The dataset contains different network packet data collected from various smart devices operating in real-world environments, including both normal traffic and diverse abnormal behaviors, effectively reflecting the security threats and anomaly patterns faced by IoT systems. With a large volume of data and complete annotations, the dataset provides rich traffic features such as packet size, communication protocol types, source and destination IPs, making it suitable for training and testing anomaly detection models. By leveraging this dataset, this study aims to validate the applicability and effectiveness of the proposed method across diverse IoT device environments and enhance the model's capability to identify anomalies in real-world scenarios. The experimental results will be presented and analyzed in detail in the following chapter.
+    In this experiment utilizes the latest 2024 Internet of Things (IoT) dataset~\cite{ciciot2024} as the source of experimental data. The dataset contains different network packet data collected from various smart devices operating in real-world environments, including both normal traffic and diverse abnormal behaviors, effectively reflecting the security threats and anomaly patterns faced by IoT systems. With a large volume of data and complete annotations, the dataset provides rich traffic features such as packet size, communication protocol types, source and destination IPs, making it suitable for training and testing anomaly detection models. By leveraging this dataset, this study aims to validate the applicability and effectiveness of the proposed method across diverse IoT device environments and enhance the model's capability to identify anomalies in real-world scenarios. The experimental results will be presented and analyzed in detail in the following chapter.
+
+
+    This experiment uses CUDA to GPU acceleration for model training, and the training process executes 10 epochs in total.
+    \begin{figure*}[!t]
+        \centering
+        \includegraphics[width = 0.6\textwidth]{image/Dataset.jpg}
+        \caption{Download the CIC IoMT dataset 2024}
+        \label{fig:D}
+    \end{figure*}
 
 
 
-    In this study, we conducted anomaly detection on a dataset comprising 238,687 samples with 10 network traffic features. We employed a feature representation method based on self-double hashing combined with an MLP model, and utilized the Mahalanobis distance to calculate anomaly scores for detecting anomalies in the CICIoT2024~\cite{ciciot2024} dataset. The dataset contains a total of 238,687 samples, and the 99th percentile of the anomaly scores was used as the decision threshold.
-
-
-    This experiment uses GPU (CUDA) acceleration for model training, and the training process executes 10 epochs in total.
 \end{ZhChapter}
